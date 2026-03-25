@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <Base
@@ -34,7 +34,7 @@ const base = import.meta.env.BASE_URL;
               <h3>Ezcaray</h3>
               <div class="meta-row"><span class="meta-chip">Montaña</span><span class="meta-chip">Gastronomía</span><span class="meta-chip">Enoturismo</span></div>
               <p>Pueblo de referencia para escapadas rurales, ideal para combinar paisaje de sierra, gastronomía de autor y visitas a bodegas cercanas.</p>
-              <a href={`${base}reservas?destino=ezcaray`} class="mini-btn">Ver propuesta</a>
+              <a href={`${base}/reservas?destino=ezcaray`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
           <article class="destination-card fade-up">
@@ -43,7 +43,7 @@ const base = import.meta.env.BASE_URL;
               <h3>Briones</h3>
               <div class="meta-row"><span class="meta-chip">Historia</span><span class="meta-chip">Vino</span><span class="meta-chip">Patrimonio</span></div>
               <p>Villa medieval con vistas únicas a la Rioja Alta. Sede del Museo Vivanco de la Cultura del Vino, referente mundial del enoturismo.</p>
-              <a href={`${base}reservas?destino=briones`} class="mini-btn">Ver propuesta</a>
+              <a href={`${base}/reservas?destino=briones`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
           <article class="destination-card fade-up">
@@ -52,7 +52,7 @@ const base = import.meta.env.BASE_URL;
               <h3>Haro</h3>
               <div class="meta-row"><span class="meta-chip">Enoturismo</span><span class="meta-chip">Bodegas</span><span class="meta-chip">Cultura</span></div>
               <p>Capital del vino riojano. Aquí se concentran bodegas centenarias como Muga y López de Heredia, junto a una vibrante escena gastronómica.</p>
-              <a href={`${base}reservas?destino=haro`} class="mini-btn">Ver propuesta</a>
+              <a href={`${base}/reservas?destino=haro`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
           <article class="destination-card fade-up">
@@ -61,7 +61,7 @@ const base = import.meta.env.BASE_URL;
               <h3>Elciego</h3>
               <div class="meta-row"><span class="meta-chip">Premium</span><span class="meta-chip">Marqués de Riscal</span><span class="meta-chip">Rioja Alavesa</span></div>
               <p>Hogar del icónico Hotel Marqués de Riscal, diseñado por Frank Gehry. El destino premium del enoturismo en La Rioja Alavesa.</p>
-              <a href={`${base}reservas?exp=premium`} class="mini-btn">Experiencia premium</a>
+              <a href={`${base}/reservas?exp=premium`} class="mini-btn">Experiencia premium</a>
             </div>
           </article>
           <article class="destination-card fade-up">
@@ -70,7 +70,7 @@ const base = import.meta.env.BASE_URL;
               <h3>Logroño</h3>
               <div class="meta-row"><span class="meta-chip">Capital</span><span class="meta-chip">Tapas</span><span class="meta-chip">Casco viejo</span></div>
               <p>Capital de La Rioja. La calle Laurel concentra el mejor tapeo de la región, con pintxos y vinos locales que son toda una institución.</p>
-              <a href={`${base}reservas?destino=logrono`} class="mini-btn">Ver propuesta</a>
+              <a href={`${base}/reservas?destino=logrono`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
           <article class="destination-card fade-up">
@@ -79,7 +79,7 @@ const base = import.meta.env.BASE_URL;
               <h3>Santo Domingo de la Calzada</h3>
               <div class="meta-row"><span class="meta-chip">Camino de Santiago</span><span class="meta-chip">Medieval</span><span class="meta-chip">Patrimonio</span></div>
               <p>Ciudad medieval en el Camino de Santiago, con una catedral romanogótica declarada Bien de Interés Cultural y un rico patrimonio histórico.</p>
-              <a href={`${base}reservas?destino=santodomingo`} class="mini-btn">Ver propuesta</a>
+              <a href={`${base}/reservas?destino=santodomingo`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
           <article class="destination-card fade-up">
@@ -88,7 +88,7 @@ const base = import.meta.env.BASE_URL;
               <h3>Enciso</h3>
               <div class="meta-row"><span class="meta-chip">Paleontología</span><span class="meta-chip">Jurásico</span><span class="meta-chip">Naturaleza</span></div>
               <p>En el corazón de la Sierra de los Cameros, Enciso alberga uno de los conjuntos de huellas de dinosaurio más relevantes de Europa. Un destino único en La Rioja que demuestra que esta tierra guarda mucho más que vino.</p>
-              <a href={`${base}reservas?destino=enciso`} class="mini-btn">Ver propuesta</a>
+              <a href={`${base}/reservas?destino=enciso`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
           <article class="destination-card fade-up">
@@ -97,7 +97,7 @@ const base = import.meta.env.BASE_URL;
               <h3>Cornago</h3>
               <div class="meta-row"><span class="meta-chip">Castillo</span><span class="meta-chip">Medieval</span><span class="meta-chip">Valle del Cidacos</span></div>
               <p>Pequeño pueblo serrano con un castillo medieval que domina el valle del Cidacos. Ideal para rutas combinadas con Enciso, gastronomía local y naturaleza tranquila a ritmo propio.</p>
-              <a href={`${base}reservas?destino=cornago`} class="mini-btn">Ver propuesta</a>
+              <a href={`${base}/reservas?destino=cornago`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
         </div>

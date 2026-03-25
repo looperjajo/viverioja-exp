@@ -1,27 +1,27 @@
 ---
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const path = Astro.url.pathname;
 const isActive = (slug: string) => {
-  if (slug === '') return path === base || path === base.slice(0, -1);
+  if (slug === '') return path === `${base}/` || path === base;
   return path.includes(`/${slug}`);
 };
 ---
 
 <nav id="navbar">
   <div class="nav-wrap">
-    <a href={base} class="brand">
-      <img src={`${base}img/logo-viverioja.png`} alt="ViveRioja Experience — Inicio">
+    <a href={`${base}/`} class="brand">
+      <img src={`${base}/img/logo-viverioja.png`} alt="ViveRioja Experience — Inicio">
     </a>
 
     <button id="menuBtn" aria-label="Abrir menú" aria-expanded="false" onclick="toggleMenu()">☰</button>
 
     <div class="nav-links" id="navLinks">
-      <a href={base} class={isActive('') ? 'active' : ''}>Inicio</a>
-      <a href={`${base}experiencias`} class={isActive('experiencias') ? 'active' : ''}>Experiencias</a>
-      <a href={`${base}destinos`} class={isActive('destinos') ? 'active' : ''}>Destinos</a>
-      <a href={`${base}patrimonio`} class={isActive('patrimonio') ? 'active' : ''}>Patrimonio</a>
-      <a href={`${base}reservas`} class={isActive('reservas') ? 'active' : ''}>Reservas</a>
-      <a href={`${base}contacto`} class={isActive('contacto') ? 'active' : ''}>Contacto</a>
+      <a href={`${base}/`} class={isActive('') ? 'active' : ''}>Inicio</a>
+      <a href={`${base}/experiencias`} class={isActive('experiencias') ? 'active' : ''}>Experiencias</a>
+      <a href={`${base}/destinos`} class={isActive('destinos') ? 'active' : ''}>Destinos</a>
+      <a href={`${base}/patrimonio`} class={isActive('patrimonio') ? 'active' : ''}>Patrimonio</a>
+      <a href={`${base}/reservas`} class={isActive('reservas') ? 'active' : ''}>Reservas</a>
+      <a href={`${base}/contacto`} class={isActive('contacto') ? 'active' : ''}>Contacto</a>
     </div>
   </div>
 </nav>
