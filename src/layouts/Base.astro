@@ -1,0 +1,109 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  preloadHero?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogTitle,
+  ogDescription,
+  preloadHero,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="author" content="ViveRioja Experience, S.L." />
+  {canonical && <link rel="canonical" href={canonical} />}
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍷</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+
+  <meta property="og:title" content={ogTitle ?? title} />
+  <meta property="og:description" content={ogDescription ?? description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:site_name" content="ViveRioja Experience" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={ogTitle ?? title} />
+  <meta name="twitter:description" content={ogDescription ?? description} />
+
+  {preloadHero && <link rel="preload" as="image" href={preloadHero} />}
+</head>
+<body>
+
+  <Navbar />
+
+  <slot />
+
+  <Footer />
+
+  <div id="priceOverlay"></div>
+
+  <script>
+    const navbar = document.getElementById('navbar')!;
+    const animatedItems = document.querySelectorAll('.fade-up');
+
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    animatedItems.forEach(item => observer.observe(item));
+
+    (window as any).toggleMenu = function() {
+      const nav = document.getElementById('navLinks')!;
+      const btn = document.getElementById('menuBtn')!;
+      const isOpen = nav.classList.toggle('open');
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      btn.textContent = isOpen ? '✕' : '☰';
+      if (isOpen) {
+        nav.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            nav.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.textContent = '☰';
+          }, { once: true });
+        });
+      }
+    };
+
+    (window as any).deactivatePriceFocus = function() {
+      document.getElementById('priceOverlay')!.classList.remove('active');
+    };
+    (window as any).activatePriceFocus = function() {
+      document.getElementById('priceOverlay')!.classList.add('active');
+    };
+
+    document.getElementById('priceOverlay')!.addEventListener('click', (window as any).deactivatePriceFocus);
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+---
+const path = Astro.url.pathname;
+const isActive = (href: string) => {
+  if (href === '/') return path === '/' || path === '/index';
+  return path.startsWith(href);
+};
+---
+
+<nav id="navbar">
+  <div class="nav-wrap">
+    <a href="/" class="brand">
+      <img src="/img/logo-viverioja.png" alt="ViveRioja Experience — Inicio">
+    </a>
+
+    <button id="menuBtn" aria-label="Abrir menú" aria-expanded="false" onclick="toggleMenu()">☰</button>
+
+    <div class="nav-links" id="navLinks">
+      <a href="/" class={isActive('/') ? 'active' : ''}>Inicio</a>
+      <a href="/experiencias" class={isActive('/experiencias') ? 'active' : ''}>Experiencias</a>
+      <a href="/destinos" class={isActive('/destinos') ? 'active' : ''}>Destinos</a>
+      <a href="/patrimonio" class={isActive('/patrimonio') ? 'active' : ''}>Patrimonio</a>
+      <a href="/reservas" class={isActive('/reservas') ? 'active' : ''}>Reservas</a>
+      <a href="/contacto" class={isActive('/contacto') ? 'active' : ''}>Contacto</a>
+    </div>
+  </div>
+</nav>

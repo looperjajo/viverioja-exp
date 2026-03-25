@@ -1,0 +1,167 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Reservas — Experiencias de enoturismo y turismo rural en La Rioja | ViveRioja"
+  description="Reserva tu experiencia en La Rioja: enoturismo, escapadas rurales y rutas culturales. Tres niveles: Estándar, Personalizada y Premium."
+  canonical="https://viverioja.es/reservas"
+>
+
+  <style>
+    .steps { display:flex; gap:0; margin-bottom:32px; }
+    .step { flex:1; padding:14px 18px; background:var(--bg-soft); border:1px solid rgba(159,64,64,0.10); }
+    .step:first-child { border-radius:16px 0 0 16px; }
+    .step:last-child { border-radius:0 16px 16px 0; }
+    .step.active-step { background:rgba(159,64,64,0.10); border-color:rgba(159,64,64,0.25); }
+    .step-num { font-size:0.75rem; font-weight:800; color:var(--brand); letter-spacing:0.1em; text-transform:uppercase; }
+    .step-label { font-size:0.88rem; color:var(--text); font-weight:600; margin-top:2px; }
+    .nivel-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:28px; }
+    .nivel-card { border:2px solid rgba(159,64,64,0.12); border-radius:16px; padding:18px; cursor:pointer; transition:.2s; background:rgba(255,255,255,0.7); }
+    .nivel-card:hover, .nivel-card.selected { border-color:var(--brand); background:rgba(159,64,64,0.05); }
+    .nivel-card h4 { color:var(--brand); font-size:1rem; margin-bottom:6px; }
+    .nivel-card p { font-size:0.82rem; color:var(--muted); line-height:1.55; }
+    .nivel-card .price-tag { font-size:1.1rem; font-weight:800; color:var(--brand); margin-top:8px; }
+    @media(max-width:640px) { .nivel-cards { grid-template-columns:1fr; } .steps { flex-direction:column; gap:6px; } .step { border-radius:12px !important; } }
+  </style>
+
+  <header style="padding:140px 0 60px;background:var(--bg-soft);">
+    <div class="container">
+      <div class="eyebrow">Reservas</div>
+      <h1 style="font-size:clamp(2rem,4vw,3rem);margin-bottom:12px;">Planifica tu experiencia en La Rioja</h1>
+      <p style="color:var(--muted);max-width:620px;line-height:1.8;">Selecciona el nivel de experiencia, indica tu fecha preferida y déjanos tus datos. Te contactamos en menos de 24 horas con tu propuesta personalizada.</p>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="container">
+        <div class="booking-grid">
+          <div class="glass-panel fade-up">
+            <div class="steps">
+              <div class="step active-step"><div class="step-num">Paso 1</div><div class="step-label">Elige tu experiencia</div></div>
+              <div class="step"><div class="step-num">Paso 2</div><div class="step-label">Tus datos</div></div>
+              <div class="step"><div class="step-num">Paso 3</div><div class="step-label">Confirmación</div></div>
+            </div>
+
+            <div style="margin-bottom:20px;">
+              <label style="font-size:0.88rem;font-weight:700;color:var(--text-label);display:block;margin-bottom:12px;">Nivel de experiencia</label>
+              <div class="nivel-cards">
+                <div class="nivel-card" onclick="selectNivel(this,'Estándar')">
+                  <h4>Estándar</h4>
+                  <p>Rutas guiadas, pueblos con encanto y gastronomía local.</p>
+                  <div class="price-tag">24,99 – 89,99 €</div>
+                </div>
+                <div class="nivel-card" onclick="selectNivel(this,'Personalizada')">
+                  <h4>Personalizada</h4>
+                  <p>Tú eliges bodegas, duración y actividades. Nosotros organizamos.</p>
+                  <div class="price-tag">90 – 150 €</div>
+                </div>
+                <div class="nivel-card" onclick="selectNivel(this,'Premium')">
+                  <h4>Premium</h4>
+                  <p>Visitas privadas, sommelier, transporte y alojamiento de lujo.</p>
+                  <div class="price-tag">Desde 150 €</div>
+                </div>
+              </div>
+            </div>
+
+            <form id="bookingForm">
+              <input type="hidden" id="nivelInput" name="nivel" value="" />
+              <div class="field-row">
+                <div>
+                  <label for="name">Nombre completo</label>
+                  <input id="name" type="text" placeholder="Nombre y apellidos" required />
+                </div>
+                <div>
+                  <label for="email">Correo electrónico</label>
+                  <input id="email" type="email" placeholder="correo@ejemplo.com" required />
+                </div>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="phone">Teléfono</label>
+                  <input id="phone" type="tel" placeholder="+34 600 000 000" />
+                </div>
+                <div>
+                  <label for="personas">Número de personas</label>
+                  <select id="personas">
+                    <option value="">Selecciona</option>
+                    <option>1 persona</option>
+                    <option>2 personas</option>
+                    <option>3-5 personas</option>
+                    <option>6-10 personas</option>
+                    <option>Grupo de más de 10</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-row">
+                <div>
+                  <label for="date">Fecha deseada</label>
+                  <input id="date" type="date" required />
+                </div>
+                <div>
+                  <label for="package">Experiencia específica</label>
+                  <select id="package" required>
+                    <option value="">Seleccione una opción</option>
+                    <option>Ruta Rioja Esencial — 24,99 €</option>
+                    <option>Escapada Rioja Confort — 69,99 €</option>
+                    <option>Rioja Sabor & Descanso — 89,99 €</option>
+                    <option>Ruta Patrimonio y Arqueología — 39,99 €</option>
+                    <option>Experiencia personalizada (a medida)</option>
+                    <option>Experiencia premium (exclusiva)</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label for="message">Cuéntanos qué buscas</label>
+                <textarea id="message" placeholder="Indícanos tus intereses: vino, gastronomía, historia, naturaleza... ¿Tienes alguna bodega en mente? ¿Prefiere mañana o tarde? ¡Cualquier detalle nos ayuda a preparar tu experiencia perfecta!"></textarea>
+              </div>
+              <button class="btn" type="submit" style="width:100%;padding:16px;">Enviar solicitud de reserva</button>
+              <p style="font-size:0.82rem;color:var(--muted);text-align:center;margin-top:10px;">Te responderemos en menos de 24 horas con tu propuesta personalizada.</p>
+              <div class="success-message" id="successMessage">
+                ¡Solicitud enviada correctamente! El equipo de ViveRioja Experience te contactará en menos de 24 horas para confirmar tu experiencia.
+              </div>
+            </form>
+          </div>
+
+          <div class="glass-panel fade-up">
+            <div class="eyebrow">¿Por qué reservar con nosotros?</div>
+            <h2 style="font-size:1.8rem;margin-bottom:16px;">Todo organizado, tú solo disfruta.</h2>
+            <ul class="intro-list" style="margin-bottom:24px;">
+              <li><span class="mini-badge">✓</span><span>Acceso a bodegas premium: Marqués de Riscal, Ysios, Muga y más.</span></li>
+              <li><span class="mini-badge">✓</span><span>Guías especializados en enoturismo y patrimonio riojano.</span></li>
+              <li><span class="mini-badge">✓</span><span>Gastronomía local concertada: Venta Moncalvillo, Echaurren y más.</span></li>
+              <li><span class="mini-badge">✓</span><span>Sin sorpresas: precio cerrado antes de confirmar la reserva.</span></li>
+              <li><span class="mini-badge">✓</span><span>Atención personalizada antes, durante y después de la experiencia.</span></li>
+            </ul>
+            <div class="eyebrow" style="margin-bottom:12px;">Contacto directo</div>
+            <div class="contact-list">
+              <div class="contact-item"><strong>Correo:</strong> info@viverioja.es</div>
+              <div class="contact-item"><strong>Teléfono:</strong> +34 600 123 456</div>
+              <div class="contact-item"><strong>Ubicación:</strong> Logroño, La Rioja, España</div>
+            </div>
+            <iframe class="map-frame" src="https://www.google.com/maps?q=Logro%C3%B1o%20La%20Rioja&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="margin-top:18px;" title="Logroño en Google Maps"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const bookingForm = document.getElementById('bookingForm')!;
+    const successMessage = document.getElementById('successMessage')!;
+
+    bookingForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      successMessage.style.display = 'block';
+      successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+
+    (window as any).selectNivel = function(el: HTMLElement, value: string) {
+      document.querySelectorAll('.nivel-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      (document.getElementById('nivelInput') as HTMLInputElement).value = value;
+    };
+  </script>
+
+</Base>

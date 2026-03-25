@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Contacto — ViveRioja Experience | Turismo rural en La Rioja"
+  description="Contacta con ViveRioja Experience para información sobre experiencias, disponibilidad o consultas personalizadas. Respondemos en menos de 24 horas."
+  canonical="https://viverioja.es/contacto"
+>
+
+  <header style="padding:140px 0 60px;background:var(--bg-soft);">
+    <div class="container">
+      <div class="eyebrow">Contacto</div>
+      <h1 style="font-size:clamp(2rem,4vw,3rem);margin-bottom:12px;">Estamos aquí para ayudarte</h1>
+      <p style="color:var(--muted);max-width:620px;line-height:1.8;">¿Tienes dudas sobre destinos, bodegas o disponibilidad? Escríbenos y te orientamos con una propuesta adaptada a tus necesidades.</p>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="container">
+        <div class="booking-grid">
+          <div class="glass-panel fade-up">
+            <div class="eyebrow">Envíanos un mensaje</div>
+            <h2 style="font-size:1.8rem;margin-bottom:20px;">¿En qué podemos ayudarte?</h2>
+            <form id="bookingForm">
+              <div class="field-row">
+                <div><label for="name">Nombre completo</label><input id="name" type="text" placeholder="Nombre y apellidos" required /></div>
+                <div><label for="email">Correo electrónico</label><input id="email" type="email" placeholder="correo@ejemplo.com" required /></div>
+              </div>
+              <div>
+                <label for="subject">Asunto</label>
+                <select id="subject">
+                  <option value="">Selecciona un tema</option>
+                  <option>Información sobre experiencias</option>
+                  <option>Consulta de disponibilidad</option>
+                  <option>Experiencia personalizada o premium</option>
+                  <option>Grupos y eventos corporativos</option>
+                  <option>Otra consulta</option>
+                </select>
+              </div>
+              <div><label for="message">Mensaje</label><textarea id="message" placeholder="Cuéntanos qué tipo de experiencia buscas, cuántas personas sois, fechas aproximadas..."></textarea></div>
+              <button class="btn" type="submit" style="width:100%;padding:16px;">Enviar mensaje</button>
+              <div class="success-message" id="successMessage">Mensaje enviado correctamente. Te responderemos en menos de 24 horas.</div>
+            </form>
+          </div>
+
+          <div class="fade-up">
+            <div class="contact-list" style="margin-bottom:24px;">
+              <div class="contact-item"><strong>Correo electrónico:</strong><br>info@viverioja.es</div>
+              <div class="contact-item"><strong>Teléfono:</strong><br>+34 600 123 456</div>
+              <div class="contact-item"><strong>Ubicación de referencia:</strong><br>Logroño, La Rioja, España</div>
+              <div class="contact-item"><strong>Horario de atención:</strong><br>Lunes a viernes, 9:00 – 18:00 h</div>
+            </div>
+            <div class="side-card" style="margin-bottom:16px;">
+              <h3>Grupos y eventos corporativos</h3>
+              <p>Organizamos experiencias para grupos de empresa, team building y eventos especiales en La Rioja. Contacta con nosotros para una propuesta personalizada.</p>
+            </div>
+            <div class="side-card">
+              <h3>Proyecto académico</h3>
+              <p>ViveRioja Experience S.L. es un proyecto intermodular del CFGM de Gestión Administrativa, desarrollado por Joanny Frandiel López Moreno (2024–2026).</p>
+            </div>
+            <iframe class="map-frame" src="https://www.google.com/maps?q=Logro%C3%B1o%20La%20Rioja&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="margin-top:18px;" title="Logroño en Google Maps"></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('bookingForm')!.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const msg = document.getElementById('successMessage')!;
+      msg.style.display = 'block';
+      msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  </script>
+
+</Base>

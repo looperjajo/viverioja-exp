@@ -1,0 +1,185 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Experiencias de enoturismo en La Rioja — Estándar, Personalizada y Premium | ViveRioja"
+  description="Reserva tu experiencia en La Rioja: enoturismo, escapadas rurales y rutas culturales. Tres niveles: Estándar, Personalizada y Premium."
+  canonical="https://viverioja.es/experiencias"
+>
+
+  <header class="hero" style="min-height:55vh;padding:100px 0 50px;background:linear-gradient(rgba(18,12,12,0.45),rgba(73,22,22,0.45)),url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1200&q=75') center/cover;">
+    <div class="hero-card fade-up show" style="padding:32px 40px;">
+      <span class="eyebrow-light">Enoturismo y escapadas rurales</span>
+      <h1 style="font-size:clamp(2rem,4vw,3.5rem);">Nuestras experiencias en La Rioja</h1>
+      <p>Tres niveles de experiencia para adaptarnos a tu perfil, presupuesto y tiempo disponible.</p>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="container">
+        <div class="section-head fade-up">
+          <div>
+            <div class="eyebrow">Nivel estándar</div>
+            <h2>Escapadas rurales en La Rioja: elige la propuesta que mejor se adapte a tu viaje.</h2>
+          </div>
+          <p class="section-copy">Desde una ruta breve hasta una escapada con alojamiento y gastronomía, cada opción está pensada para ser clara, cómoda y memorable.</p>
+        </div>
+        <div class="package-grid">
+          <article class="package-card fade-up">
+            <span class="pill">Esencial · Estándar</span>
+            <div class="package-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" width="28" height="28" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8v4a4 4 0 0 1-8 0V3Z"/><path d="M12 11v7"/><path d="M9 21h6"/></svg>
+            </div>
+            <h3 class="package-title">Ruta Rioja Esencial</h3>
+            <p class="package-desc">Una ruta breve para descubrir un pueblo con encanto, su historia y una primera toma de contacto con el vino riojano.</p>
+            <div class="price"><strong>24,99 €</strong><span>por persona</span></div>
+            <ul class="package-features">
+              <li><span class="tick">✓</span><span>Ruta guiada de aproximadamente 2 horas.</span></li>
+              <li><span class="tick">✓</span><span>Introducción cultural e histórica del entorno.</span></li>
+              <li><span class="tick">✓</span><span>Recomendaciones gastronómicas cercanas.</span></li>
+            </ul>
+            <a href="/reservas?exp=esencial" class="package-btn">Reservar esta experiencia</a>
+          </article>
+
+          <article class="package-card featured fade-up">
+            <span class="pill">Más elegida · Estándar</span>
+            <div class="package-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" width="28" height="28" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-5h4v5"/></svg>
+            </div>
+            <h3 class="package-title">Escapada Rioja Confort</h3>
+            <p class="package-desc">Visita guiada, estancia en alojamiento rural colaborador y acceso a propuestas gastronómicas locales.</p>
+            <div class="price"><strong>69,99 €</strong><span>por persona</span></div>
+            <ul class="package-features">
+              <li><span class="tick">✓</span><span>Ruta guiada por entorno rural y cultural.</span></li>
+              <li><span class="tick">✓</span><span>1 noche en alojamiento colaborador.</span></li>
+              <li><span class="tick">✓</span><span>Confirmación digital de la estancia.</span></li>
+            </ul>
+            <a href="/reservas?exp=confort" class="package-btn">Reservar esta experiencia</a>
+          </article>
+
+          <article class="package-card fade-up">
+            <span class="pill">Completa · Estándar</span>
+            <div class="package-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" width="28" height="28" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h11v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8Z"/><path d="M15 10h2a3 3 0 1 1 0 6h-2"/><path d="M7 4v2"/><path d="M10 4v2"/><path d="M13 4v2"/></svg>
+            </div>
+            <h3 class="package-title">Rioja Sabor & Descanso</h3>
+            <p class="package-desc">Visita, descanso y gastronomía local dentro de una misma propuesta organizada por ViveRioja.</p>
+            <div class="price"><strong>89,99 €</strong><span>por persona</span></div>
+            <ul class="package-features">
+              <li><span class="tick">✓</span><span>Ruta guiada con enfoque rural y cultural.</span></li>
+              <li><span class="tick">✓</span><span>1 noche en alojamiento colaborador.</span></li>
+              <li><span class="tick">✓</span><span>Desayuno o propuesta gastronómica concertada.</span></li>
+            </ul>
+            <a href="/reservas?exp=sabor" class="package-btn">Reservar esta experiencia</a>
+          </article>
+
+          <article class="package-card fade-up">
+            <span class="pill">Cultural · Estándar</span>
+            <div class="package-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" width="28" height="28" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20V8l6-4 6 4v12"/><path d="M9 12h6"/></svg>
+            </div>
+            <h3 class="package-title">Ruta Patrimonio y Arqueología</h3>
+            <p class="package-desc">Itinerario por enclaves históricos y arqueológicos de La Rioja, con guía especializado y parada gastronómica.</p>
+            <div class="price"><strong>39,99 €</strong><span>por persona</span></div>
+            <ul class="package-features">
+              <li><span class="tick">✓</span><span>Ruta temática de carácter patrimonial.</span></li>
+              <li><span class="tick">✓</span><span>Interpretación cultural del entorno.</span></li>
+              <li><span class="tick">✓</span><span>Opción de parada gastronómica cercana.</span></li>
+            </ul>
+            <a href="/reservas?exp=patrimonio" class="package-btn">Reservar esta experiencia</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--bg-soft);">
+      <div class="container">
+        <div class="section-head fade-up">
+          <div>
+            <div class="eyebrow">Nivel personalizado</div>
+            <h2>Diseña tu propia experiencia en La Rioja a tu medida.</h2>
+          </div>
+          <p class="section-copy">Selecciona actividades, duración, bodegas y servicios adicionales. Nosotros nos encargamos de organizarlo todo.</p>
+        </div>
+        <div class="partners-grid">
+          <article class="partner-card fade-up">
+            <div class="card-body">
+              <h3>Elige tus bodegas</h3>
+              <p>Selecciona entre Marqués de Riscal, Ysios, Muga, López de Heredia y más. Combinamos hasta 3 visitas en un día.</p>
+              <ul class="package-features">
+                <li><span class="tick">✓</span><span>Visita guiada a bodega.</span></li>
+                <li><span class="tick">✓</span><span>Cata de vinos incluida.</span></li>
+                <li><span class="tick">✓</span><span>Maridaje con productos locales.</span></li>
+              </ul>
+            </div>
+          </article>
+          <article class="partner-card fade-up">
+            <div class="card-body">
+              <h3>Adapta la duración</h3>
+              <p>Desde una escapada de medio día hasta un fin de semana completo. Tú eliges el ritmo de tu viaje por La Rioja.</p>
+              <ul class="package-features">
+                <li><span class="tick">✓</span><span>Medio día, día completo o fin de semana.</span></li>
+                <li><span class="tick">✓</span><span>Alojamiento opcional en rural colaborador.</span></li>
+                <li><span class="tick">✓</span><span>Transporte privado disponible.</span></li>
+              </ul>
+            </div>
+          </article>
+          <article class="partner-card fade-up">
+            <div class="card-body">
+              <h3>Añade gastronomía</h3>
+              <p>Integra una comida en Venta Moncalvillo, Echaurren Tradición o La Vieja Bodega dentro de tu experiencia personalizada.</p>
+              <ul class="package-features">
+                <li><span class="tick">✓</span><span>Restaurantes de referencia en La Rioja.</span></li>
+                <li><span class="tick">✓</span><span>Cocina local y de temporada.</span></li>
+                <li><span class="tick">✓</span><span>Coordinado por ViveRioja.</span></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+        <div style="text-align:center;margin-top:32px;">
+          <a href="/reservas?exp=personalizada" class="btn">Solicitar experiencia personalizada</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="section-head fade-up">
+          <div>
+            <div class="eyebrow">Nivel premium</div>
+            <h2>Experiencias exclusivas para quienes buscan lo mejor de La Rioja.</h2>
+          </div>
+          <p class="section-copy">Visitas privadas a bodegas, catas especializadas, transporte privado y atención personalizada durante toda la experiencia.</p>
+        </div>
+        <div class="intro-grid">
+          <div class="glass-panel intro-copy fade-up">
+            <p>Las experiencias premium de ViveRioja están diseñadas para clientes que buscan un servicio exclusivo, sin concesiones. Acceso privado a bodegas de élite, sommelier personal, transporte de lujo y gastronomía de autor.</p>
+            <ul class="intro-list">
+              <li><span class="mini-badge">★</span><span>Visita privada a bodega con cata especializada (desde 150 €/persona).</span></li>
+              <li><span class="mini-badge">★</span><span>Experiencia de maridaje gourmet con chef local (desde 200 €/persona).</span></li>
+              <li><span class="mini-badge">★</span><span>Fin de semana premium todo incluido — Hotel Marqués de Riscal (desde 300 €/persona).</span></li>
+            </ul>
+            <a href="/reservas?exp=premium" class="btn" style="margin-top:16px;">Solicitar experiencia premium</a>
+          </div>
+          <div class="side-stack fade-up">
+            <div class="side-card">
+              <h3>Hotel Marqués de Riscal</h3>
+              <p>Alojamiento de lujo diseñado por Frank Gehry, en el corazón de la Rioja Alavesa. La joya del enoturismo español.</p>
+            </div>
+            <div class="side-card">
+              <h3>Catas especializadas</h3>
+              <p>Guiadas por sommelier certificado. Degustación vertical de añadas, con maridaje de productos de temporada.</p>
+            </div>
+            <div class="side-card">
+              <h3>Transporte privado</h3>
+              <p>Vehículo privado con conductor para toda la experiencia. Cómodo, puntual y sin preocupaciones logísticas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</Base>
