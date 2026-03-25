@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL;
 ---
 
 <Base
@@ -32,7 +33,7 @@ import Base from '../layouts/Base.astro';
               <h3>Contrebia Leucade</h3>
               <div class="meta-row"><span class="meta-chip">Arqueología</span><span class="meta-chip">Prerromano</span></div>
               <p>Ciudad celtíbera excavada en roca viva en Aguilar del Río Alhama. Una de las joyas arqueológicas de La Rioja, con un estado de conservación excepcional.</p>
-              <a href="/reservas?exp=patrimonio" class="mini-btn">Solicitar ruta</a>
+              <a href={`${base}reservas?exp=patrimonio`} class="mini-btn">Solicitar ruta</a>
             </div>
           </article>
           <article class="culture-card fade-up">
@@ -40,7 +41,7 @@ import Base from '../layouts/Base.astro';
               <h3>Monasterio de Yuso y Suso</h3>
               <div class="meta-row"><span class="meta-chip">Patrimonio UNESCO</span><span class="meta-chip">Medieval</span></div>
               <p>Declarados Patrimonio de la Humanidad por la UNESCO. En Suso nacieron las primeras palabras escritas en castellano. Un lugar único en la historia de España.</p>
-              <a href="/reservas?exp=patrimonio" class="mini-btn">Solicitar ruta</a>
+              <a href={`${base}reservas?exp=patrimonio`} class="mini-btn">Solicitar ruta</a>
             </div>
           </article>
           <article class="culture-card fade-up">
@@ -48,7 +49,7 @@ import Base from '../layouts/Base.astro';
               <h3>Museo Vivanco del Vino</h3>
               <div class="meta-row"><span class="meta-chip">Enoturismo</span><span class="meta-chip">Cultura vinícola</span></div>
               <p>El mayor museo dedicado a la cultura del vino en España, en Briones. Combina arte, historia y gastronomía en una experiencia única vinculada al vino riojano.</p>
-              <a href="/reservas?exp=patrimonio" class="mini-btn">Solicitar ruta</a>
+              <a href={`${base}reservas?exp=patrimonio`} class="mini-btn">Solicitar ruta</a>
             </div>
           </article>
           <article class="culture-card fade-up">
@@ -56,7 +57,7 @@ import Base from '../layouts/Base.astro';
               <h3>Catedral de Santo Domingo</h3>
               <div class="meta-row"><span class="meta-chip">Camino de Santiago</span><span class="meta-chip">Romanogótico</span></div>
               <p>Una de las catedrales más singulares del Camino de Santiago, conocida por albergar gallinas vivas en su interior como tradición centenaria.</p>
-              <a href="/reservas?exp=patrimonio" class="mini-btn">Solicitar ruta</a>
+              <a href={`${base}reservas?exp=patrimonio`} class="mini-btn">Solicitar ruta</a>
             </div>
           </article>
           <article class="culture-card fade-up">
@@ -64,7 +65,7 @@ import Base from '../layouts/Base.astro';
               <h3>Cultura del vino en La Rioja</h3>
               <div class="meta-row"><span class="meta-chip">Enoturismo</span><span class="meta-chip">Historia vinícola</span></div>
               <p>La vid lleva presente en La Rioja desde la época romana. Un recorrido por la historia del vino riojano: desde las bodegas rupestres medievales hasta las grandes bodegas actuales.</p>
-              <a href="/reservas?exp=personalizada" class="mini-btn">Diseña tu ruta</a>
+              <a href={`${base}reservas?exp=personalizada`} class="mini-btn">Diseña tu ruta</a>
             </div>
           </article>
           <article class="culture-card fade-up">
@@ -72,7 +73,7 @@ import Base from '../layouts/Base.astro';
               <h3>Cultura + gastronomía local</h3>
               <div class="meta-row"><span class="meta-chip">Experiencia mixta</span><span class="meta-chip">Selección local</span></div>
               <p>Propuestas que unen patrimonio, pausa gastronómica en restaurante local y una forma más completa de recorrer La Rioja en un solo día.</p>
-              <a href="/reservas?exp=personalizada" class="mini-btn">Diseña tu ruta</a>
+              <a href={`${base}reservas?exp=personalizada`} class="mini-btn">Diseña tu ruta</a>
             </div>
           </article>
           <article class="culture-card fade-up">
@@ -80,7 +81,7 @@ import Base from '../layouts/Base.astro';
               <h3>Huellas de Dinosaurios — Enciso</h3>
               <div class="meta-row"><span class="meta-chip">Paleontología</span><span class="meta-chip">Jurásico</span></div>
               <p>Uno de los yacimientos de icnitas (huellas fosilizadas) de dinosaurio más importantes de Europa. Más de 100 millones de años de historia grabados en roca viva, a solo unos kilómetros de la sierra riojana.</p>
-              <a href="/reservas?exp=patrimonio" class="mini-btn">Solicitar ruta</a>
+              <a href={`${base}reservas?exp=patrimonio`} class="mini-btn">Solicitar ruta</a>
             </div>
           </article>
           <article class="culture-card fade-up">
@@ -88,7 +89,7 @@ import Base from '../layouts/Base.astro';
               <h3>Castillo y yacimiento de Cornago</h3>
               <div class="meta-row"><span class="meta-chip">Medieval</span><span class="meta-chip">Reconquista</span></div>
               <p>El castillo medieval de Cornago domina el valle del Cidacos desde lo alto. Un enclave de la Reconquista con vistas al entorno serrano, integrado en rutas que combinan historia, naturaleza y gastronomía local.</p>
-              <a href="/reservas?exp=patrimonio" class="mini-btn">Solicitar ruta</a>
+              <a href={`${base}reservas?exp=patrimonio`} class="mini-btn">Solicitar ruta</a>
             </div>
           </article>
         </div>

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL;
 ---
 
 <Base
@@ -18,8 +19,8 @@ import Base from '../layouts/Base.astro';
           Escapadas rurales, rutas de patrimonio y gastronomía auténtica. Diseñadas para quienes quieren vivir La Rioja de verdad, sin prisas y con criterio.
         </p>
         <div class="hero-actions">
-          <a href="/experiencias" class="btn">Explorar experiencias</a>
-          <a href="/reservas" class="ghost-btn">Reservar ahora</a>
+          <a href={`${base}experiencias`} class="btn">Explorar experiencias</a>
+          <a href={`${base}reservas`} class="ghost-btn">Reservar ahora</a>
         </div>
         <div class="hero-stats">
           <div class="hero-stat"><strong>12+</strong><span>Experiencias</span></div>
@@ -98,7 +99,7 @@ import Base from '../layouts/Base.astro';
               <li><span class="tick">✓</span><span>Introducción cultural e histórica del entorno.</span></li>
               <li><span class="tick">✓</span><span>Recomendaciones gastronómicas cercanas.</span></li>
             </ul>
-            <a href="/reservas?exp=esencial" class="package-btn">Seleccionar servicio</a>
+            <a href={`${base}reservas?exp=esencial`} class="package-btn">Seleccionar servicio</a>
           </article>
 
           <article class="package-card featured fade-up">
@@ -116,7 +117,7 @@ import Base from '../layouts/Base.astro';
               <li><span class="tick">✓</span><span>1 noche en alojamiento colaborador.</span></li>
               <li><span class="tick">✓</span><span>Confirmación digital de la estancia.</span></li>
             </ul>
-            <a href="/reservas?exp=confort" class="package-btn">Seleccionar servicio</a>
+            <a href={`${base}reservas?exp=confort`} class="package-btn">Seleccionar servicio</a>
           </article>
 
           <article class="package-card fade-up">
@@ -134,7 +135,7 @@ import Base from '../layouts/Base.astro';
               <li><span class="tick">✓</span><span>1 noche en alojamiento colaborador.</span></li>
               <li><span class="tick">✓</span><span>Desayuno o propuesta gastronómica concertada.</span></li>
             </ul>
-            <a href="/reservas?exp=sabor" class="package-btn">Seleccionar servicio</a>
+            <a href={`${base}reservas?exp=sabor`} class="package-btn">Seleccionar servicio</a>
           </article>
 
           <article class="package-card fade-up">
@@ -152,7 +153,7 @@ import Base from '../layouts/Base.astro';
               <li><span class="tick">✓</span><span>Interpretación cultural del entorno.</span></li>
               <li><span class="tick">✓</span><span>Opción de parada gastronómica cercana.</span></li>
             </ul>
-            <a href="/reservas?exp=patrimonio" class="package-btn">Seleccionar servicio</a>
+            <a href={`${base}reservas?exp=patrimonio`} class="package-btn">Seleccionar servicio</a>
           </article>
         </div>
       </div>
@@ -174,7 +175,7 @@ import Base from '../layouts/Base.astro';
               <h3>Ezcaray</h3>
               <div class="meta-row"><span class="meta-chip">Montaña</span><span class="meta-chip">Gastronomía</span></div>
               <p>Pueblo de referencia para escapadas rurales, ideal para combinar paisaje, gastronomía y alojamiento.</p>
-              <a href="/reservas?destino=ezcaray" class="mini-btn">Ver propuesta</a>
+              <a href={`${base}reservas?destino=ezcaray`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
           <article class="destination-card fade-up">
@@ -183,7 +184,7 @@ import Base from '../layouts/Base.astro';
               <h3>Briones</h3>
               <div class="meta-row"><span class="meta-chip">Historia</span><span class="meta-chip">Vino</span></div>
               <p>Un destino con personalidad propia, patrimonio y gran valor para propuestas culturales y enoturísticas.</p>
-              <a href="/reservas?destino=briones" class="mini-btn">Ver propuesta</a>
+              <a href={`${base}reservas?destino=briones`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
           <article class="destination-card fade-up">
@@ -192,7 +193,7 @@ import Base from '../layouts/Base.astro';
               <h3>Haro</h3>
               <div class="meta-row"><span class="meta-chip">Enoturismo</span><span class="meta-chip">Escapada</span></div>
               <p>Destino estratégico para experiencias más completas por su notoriedad, entorno y capacidad de colaboración local.</p>
-              <a href="/reservas?destino=haro" class="mini-btn">Ver propuesta</a>
+              <a href={`${base}reservas?destino=haro`} class="mini-btn">Ver propuesta</a>
             </div>
           </article>
         </div>
@@ -214,7 +215,7 @@ import Base from '../layouts/Base.astro';
               <h3>Huellas de Dinosaurios — Enciso</h3>
               <div class="meta-row"><span class="meta-chip">Paleontología</span><span class="meta-chip">Jurásico</span></div>
               <p>Uno de los yacimientos de icnitas más importantes de Europa. Más de 100 millones de años grabados en roca viva en plena Sierra de los Cameros.</p>
-              <a href="/patrimonio" class="mini-btn">Ver más</a>
+              <a href={`${base}patrimonio`} class="mini-btn">Ver más</a>
             </div>
           </article>
           <article class="culture-card fade-up">
@@ -222,7 +223,7 @@ import Base from '../layouts/Base.astro';
               <h3>Monasterios de Yuso y Suso</h3>
               <div class="meta-row"><span class="meta-chip">UNESCO</span><span class="meta-chip">Medieval</span></div>
               <p>Donde nacieron las primeras palabras escritas en castellano. Patrimonio de la Humanidad en San Millán de la Cogolla, a solo unos kilómetros de Ezcaray.</p>
-              <a href="/patrimonio" class="mini-btn">Ver más</a>
+              <a href={`${base}patrimonio`} class="mini-btn">Ver más</a>
             </div>
           </article>
           <article class="culture-card fade-up">
@@ -230,7 +231,7 @@ import Base from '../layouts/Base.astro';
               <h3>Castillo medieval de Cornago</h3>
               <div class="meta-row"><span class="meta-chip">Reconquista</span><span class="meta-chip">Valle del Cidacos</span></div>
               <p>Un castillo de la Reconquista que domina el valle del Cidacos. Combínalo con la ruta de dinosaurios de Enciso para una escapada diferente de 2 días.</p>
-              <a href="/patrimonio" class="mini-btn">Ver más</a>
+              <a href={`${base}patrimonio`} class="mini-btn">Ver más</a>
             </div>
           </article>
         </div>
@@ -242,7 +243,7 @@ import Base from '../layouts/Base.astro';
         <div class="cta-box fade-up">
           <h2>Planifica tu próxima escapada en La Rioja.</h2>
           <p>Explora una selección de experiencias pensadas para descubrir pueblos con identidad, patrimonio, gastronomía local y entornos con encanto, todo ello dentro de una propuesta visual, cómoda y mejor organizada.</p>
-          <a href="/reservas" class="ghost-btn" style="background: rgba(255,255,255,0.18); color:white; border-color:rgba(255,255,255,0.28);">Reservar experiencia</a>
+          <a href={`${base}reservas`} class="ghost-btn" style="background: rgba(255,255,255,0.18); color:white; border-color:rgba(255,255,255,0.28);">Reservar experiencia</a>
         </div>
       </div>
     </section>
@@ -257,7 +258,7 @@ import Base from '../layouts/Base.astro';
       <p>Promoción especial de presentación para visitantes que acceden a través del código QR del proyecto. Oferta válida como ejemplo comercial para la defensa ante tribunal.</p>
       <div class="promo-code">Código: TRIBUNAL10</div>
       <div class="promo-actions">
-        <a href="/reservas" class="ghost-btn" onclick="closePromo()">Usar descuento</a>
+        <a href={`${base}reservas`} class="ghost-btn" onclick="closePromo()">Usar descuento</a>
         <button class="package-btn" type="button" onclick="closePromo()">Cerrar</button>
       </div>
     </div>

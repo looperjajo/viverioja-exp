@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL;
 ---
 
 <Base
@@ -40,7 +41,7 @@ import Base from '../layouts/Base.astro';
               <li><span class="tick">✓</span><span>Introducción cultural e histórica del entorno.</span></li>
               <li><span class="tick">✓</span><span>Recomendaciones gastronómicas cercanas.</span></li>
             </ul>
-            <a href="/reservas?exp=esencial" class="package-btn">Reservar esta experiencia</a>
+            <a href={`${base}reservas?exp=esencial`} class="package-btn">Reservar esta experiencia</a>
           </article>
 
           <article class="package-card featured fade-up">
@@ -56,7 +57,7 @@ import Base from '../layouts/Base.astro';
               <li><span class="tick">✓</span><span>1 noche en alojamiento colaborador.</span></li>
               <li><span class="tick">✓</span><span>Confirmación digital de la estancia.</span></li>
             </ul>
-            <a href="/reservas?exp=confort" class="package-btn">Reservar esta experiencia</a>
+            <a href={`${base}reservas?exp=confort`} class="package-btn">Reservar esta experiencia</a>
           </article>
 
           <article class="package-card fade-up">
@@ -72,7 +73,7 @@ import Base from '../layouts/Base.astro';
               <li><span class="tick">✓</span><span>1 noche en alojamiento colaborador.</span></li>
               <li><span class="tick">✓</span><span>Desayuno o propuesta gastronómica concertada.</span></li>
             </ul>
-            <a href="/reservas?exp=sabor" class="package-btn">Reservar esta experiencia</a>
+            <a href={`${base}reservas?exp=sabor`} class="package-btn">Reservar esta experiencia</a>
           </article>
 
           <article class="package-card fade-up">
@@ -88,7 +89,7 @@ import Base from '../layouts/Base.astro';
               <li><span class="tick">✓</span><span>Interpretación cultural del entorno.</span></li>
               <li><span class="tick">✓</span><span>Opción de parada gastronómica cercana.</span></li>
             </ul>
-            <a href="/reservas?exp=patrimonio" class="package-btn">Reservar esta experiencia</a>
+            <a href={`${base}reservas?exp=patrimonio`} class="package-btn">Reservar esta experiencia</a>
           </article>
         </div>
       </div>
@@ -139,7 +140,7 @@ import Base from '../layouts/Base.astro';
           </article>
         </div>
         <div style="text-align:center;margin-top:32px;">
-          <a href="/reservas?exp=personalizada" class="btn">Solicitar experiencia personalizada</a>
+          <a href={`${base}reservas?exp=personalizada`} class="btn">Solicitar experiencia personalizada</a>
         </div>
       </div>
     </section>
@@ -161,7 +162,7 @@ import Base from '../layouts/Base.astro';
               <li><span class="mini-badge">★</span><span>Experiencia de maridaje gourmet con chef local (desde 200 €/persona).</span></li>
               <li><span class="mini-badge">★</span><span>Fin de semana premium todo incluido — Hotel Marqués de Riscal (desde 300 €/persona).</span></li>
             </ul>
-            <a href="/reservas?exp=premium" class="btn" style="margin-top:16px;">Solicitar experiencia premium</a>
+            <a href={`${base}reservas?exp=premium`} class="btn" style="margin-top:16px;">Solicitar experiencia premium</a>
           </div>
           <div class="side-stack fade-up">
             <div class="side-card">
