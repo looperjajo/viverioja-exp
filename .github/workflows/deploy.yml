@@ -24,6 +24,8 @@ jobs:
 
       - name: Build and upload with Astro
         uses: withastro/action@v3
+        with:
+          package-manager: npm
 
   deploy:
     name: Deploy
