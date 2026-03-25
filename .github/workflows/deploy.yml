@@ -22,10 +22,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build and upload with Astro
-        uses: withastro/action@v3
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
         with:
-          package-manager: npm
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Astro
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
 
   deploy:
     name: Deploy
