@@ -1,0 +1,346 @@
+// =============================================================
+// ViveRioja Experience S.L. — Medidas DAX completas
+// Copia cada bloque en Power BI Desktop (Modelado → Nueva medida)
+// Tabla recomendada: _Medidas (tabla auxiliar vacía)
+// =============================================================
+
+
+// ─────────────────────────────────────────────
+// GRUPO 1 — INGRESOS
+// ─────────────────────────────────────────────
+
+Ingresos Totales =
+CALCULATE(
+    SUM(pagos[importe]),
+    pagos[estado] = "completado",
+    RELATEDTABLE(reservas),
+    reservas[estado] = "completada"
+)
+
+// ---
+
+Ingresos Mes Actual =
+CALCULATE(
+    [Ingresos Totales],
+    DATESMTD(Dim_Fecha[Date])
+)
+
+// ---
+
+Ingresos Año Actual =
+CALCULATE(
+    [Ingresos Totales],
+    DATESYTD(Dim_Fecha[Date])
+)
+
+// ---
+
+Ingresos Mismo Mes Año Ant =
+CALCULATE(
+    [Ingresos Totales],
+    DATEADD(Dim_Fecha[Date], -1, YEAR)
+)
+
+// ---
+
+Crecimiento YoY % =
+VAR ingresos_actual   = [Ingresos Totales]
+VAR ingresos_anterior = [Ingresos Mismo Mes Año Ant]
+RETURN
+    IF(
+        ingresos_anterior = 0 || ISBLANK(ingresos_anterior),
+        BLANK(),
+        DIVIDE(ingresos_actual - ingresos_anterior, ingresos_anterior)
+    )
+
+// ---
+
+Ingresos Acumulados (Running Total) =
+CALCULATE(
+    [Ingresos Totales],
+    FILTER(
+        ALL(Dim_Fecha[Date]),
+        Dim_Fecha[Date] <= MAX(Dim_Fecha[Date])
+    )
+)
+
+// ---
+
+Objetivo Mensual = 4000
+// Ajusta este valor según el presupuesto real de la empresa
+
+// ---
+
+Vs Objetivo % =
+DIVIDE([Ingresos Mes Actual] - [Objetivo Mensual], [Objetivo Mensual])
+
+
+// ─────────────────────────────────────────────
+// GRUPO 2 — RESERVAS
+// ─────────────────────────────────────────────
+
+Reservas Completadas =
+CALCULATE(
+    COUNTROWS(reservas),
+    reservas[estado] = "completada"
+)
+
+// ---
+
+Reservas Mes Actual =
+CALCULATE(
+    [Reservas Completadas],
+    DATESMTD(Dim_Fecha[Date])
+)
+
+// ---
+
+Reservas Canceladas =
+CALCULATE(
+    COUNTROWS(reservas),
+    reservas[estado] = "cancelada"
+)
+
+// ---
+
+Reservas No Show =
+CALCULATE(
+    COUNTROWS(reservas),
+    reservas[estado] = "no_show"
+)
+
+// ---
+
+Reservas En Proceso =
+CALCULATE(
+    COUNTROWS(reservas),
+    reservas[estado] IN {"pendiente", "confirmada"}
+)
+
+// ---
+
+Tasa Cancelacion % =
+VAR canceladas =
+    CALCULATE(COUNTROWS(reservas), reservas[estado] = "cancelada")
+VAR total_cerradas =
+    CALCULATE(
+        COUNTROWS(reservas),
+        reservas[estado] IN {"completada","cancelada","no_show"}
+    )
+RETURN DIVIDE(canceladas, total_cerradas)
+
+// ---
+
+Tasa Conversion % =
+DIVIDE([Reservas Completadas],
+    CALCULATE(
+        COUNTROWS(reservas),
+        reservas[estado] IN {"completada","cancelada","no_show"}
+    )
+)
+
+// ---
+
+Personas Totales =
+CALCULATE(
+    SUM(reservas[num_personas]),
+    reservas[estado] = "completada"
+)
+
+
+// ─────────────────────────────────────────────
+// GRUPO 3 — TICKET Y PRECIOS
+// ─────────────────────────────────────────────
+
+Ticket Medio =
+DIVIDE([Ingresos Totales], [Reservas Completadas])
+
+// ---
+
+Ticket Medio Por Persona =
+DIVIDE([Ingresos Totales], [Personas Totales])
+
+// ---
+
+Descuento Promedio % =
+CALCULATE(
+    AVERAGE(reservas[descuento_pct]),
+    reservas[estado] = "completada",
+    reservas[descuento_pct] > 0
+)
+
+// ---
+
+// % del revenue total (para usar en el donut por tier)
+% Revenue Tier =
+DIVIDE(
+    [Ingresos Totales],
+    CALCULATE([Ingresos Totales], ALL(experiencias[tier]))
+)
+
+// ---
+
+% Reservas Tier =
+DIVIDE(
+    [Reservas Completadas],
+    CALCULATE([Reservas Completadas], ALL(experiencias[tier]))
+)
+
+
+// ─────────────────────────────────────────────
+// GRUPO 4 — CLIENTES Y LTV
+// ─────────────────────────────────────────────
+
+Clientes Activos =
+CALCULATE(
+    DISTINCTCOUNT(reservas[cliente_id]),
+    reservas[estado] = "completada"
+)
+
+// ---
+
+LTV Cliente =
+CALCULATE(
+    SUM(reservas[precio_total]),
+    reservas[estado] = "completada"
+)
+
+// ---
+
+Reservas Por Cliente =
+DIVIDE([Reservas Completadas], [Clientes Activos])
+
+// ---
+
+Clientes Recurrentes =
+CALCULATE(
+    DISTINCTCOUNT(reservas[cliente_id]),
+    FILTER(
+        VALUES(reservas[cliente_id]),
+        CALCULATE(COUNTROWS(reservas), reservas[estado] = "completada") > 1
+    )
+)
+
+// ---
+
+Tasa Retencion % =
+DIVIDE([Clientes Recurrentes], [Clientes Activos])
+
+// ---
+
+LTV Medio por Cliente =
+DIVIDE([Ingresos Totales], [Clientes Activos])
+
+
+// ─────────────────────────────────────────────
+// GRUPO 5 — KPI DINÁMICOS (texto para Cards)
+// ─────────────────────────────────────────────
+
+Exp Mas Vendida =
+CALCULATE(
+    FIRSTNONBLANK(experiencias[nombre], 1),
+    TOPN(
+        1,
+        SUMMARIZE(
+            FILTER(reservas, reservas[estado] = "completada"),
+            experiencias[nombre],
+            "total", [Reservas Completadas]
+        ),
+        [total], DESC
+    )
+)
+
+// ---
+
+Bodega Top =
+CALCULATE(
+    FIRSTNONBLANK(bodegas[nombre], 1),
+    TOPN(
+        1,
+        SUMMARIZE(
+            experiencia_bodega,
+            bodegas[nombre],
+            "total", CALCULATE([Reservas Completadas])
+        ),
+        [total], DESC
+    )
+)
+
+// ---
+
+Mes Top Ingresos =
+VAR resumen =
+    SUMMARIZE(
+        FILTER(reservas, reservas[estado] = "completada"),
+        Dim_Fecha[Mes Nombre],
+        "ingresos", [Ingresos Totales]
+    )
+RETURN
+    CALCULATE(
+        FIRSTNONBLANK(Dim_Fecha[Mes Nombre], 1),
+        TOPN(1, resumen, [ingresos], DESC)
+    )
+
+
+// ─────────────────────────────────────────────
+// GRUPO 6 — SATISFACCIÓN (RESEÑAS)
+// ─────────────────────────────────────────────
+
+Puntuacion Media =
+CALCULATE(
+    AVERAGE(resenas[puntuacion]),
+    resenas[publicada] = TRUE
+)
+
+// ---
+
+Total Reseñas =
+CALCULATE(
+    COUNTROWS(resenas),
+    resenas[publicada] = TRUE
+)
+
+// ---
+
+// NPS Proxy: % puntuaciones 4-5 menos % puntuaciones 1-2
+// (adaptación de NPS a escala 1-5)
+NPS Proxy =
+VAR promotores =
+    CALCULATE(COUNTROWS(resenas), resenas[puntuacion] >= 4, resenas[publicada] = TRUE)
+VAR detractores =
+    CALCULATE(COUNTROWS(resenas), resenas[puntuacion] <= 2, resenas[publicada] = TRUE)
+VAR total =
+    CALCULATE(COUNTROWS(resenas), resenas[publicada] = TRUE)
+RETURN
+    DIVIDE(promotores - detractores, total) * 100
+
+
+// ─────────────────────────────────────────────
+// COLUMNAS CALCULADAS (van en las tablas, no en _Medidas)
+// ─────────────────────────────────────────────
+
+// En tabla clientes:
+// Nombre Completo = clientes[nombre] & " " & clientes[apellidos]
+
+// En tabla clientes:
+// Segmento Geo =
+// SWITCH(
+//     clientes[pais],
+//     "España",       "Doméstico",
+//     "Francia",      "Europa Occ.",
+//     "Alemania",     "Europa Occ.",
+//     "Reino Unido",  "Europa Occ.",
+//     "Italia",       "Europa Occ.",
+//     "Países Bajos", "Europa Occ.",
+//     "Dinamarca",    "Europa Norte",
+//     "Rumanía",      "Europa Este",
+//     "EEUU",         "América",
+//     "Brasil",       "América",
+//     "Japón",        "Asia-Pacífico",
+//     "Internacional"
+// )
+
+// En tabla reservas:
+// Año Reserva = YEAR(reservas[fecha_reserva])
+// Mes Reserva = MONTH(reservas[fecha_reserva])
+// Dias Antelacion = DATEDIFF(reservas[fecha_reserva], reservas[fecha_experiencia], DAY)
