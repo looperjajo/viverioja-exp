@@ -365,7 +365,7 @@ INSERT INTO resenas (reserva_id, cliente_id, puntuacion, comentario, fecha_resen
      '2024-02-15', TRUE,  'Ana Carolina, fue una alegría celebrar vuestro San Valentín en La Rioja!'),
 (36,  2,  5, 'Segunda visita a la cena Venta Moncalvillo y sigue siendo inmejorable. Un clásico.',
      '2024-04-11', TRUE,  NULL),
-(41, 41, 3, 'Muy buen taller. Ideal para iniciarse. Sofía explica con mucha claridad.',
+(41, 26, 3, 'Muy buen taller. Ideal para iniciarse. Sofía explica con mucha claridad.',
      '2024-06-16', FALSE, NULL),  -- pendiente moderación
 (43,33,  4, 'Great Gehry experience. The wine selection was outstanding. The dinner could have a vegetarian option.',
      '2024-07-16', TRUE,  'Marco, great feedback — we are adding vegetarian options for 2025!'),
