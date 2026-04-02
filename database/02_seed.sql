@@ -3,6 +3,9 @@
 -- Ejecutar DESPUÉS de 01_schema.sql
 -- =============================================================
 
+-- Limpia datos previos y reinicia secuencias (permite re-ejecutar sin errores)
+TRUNCATE TABLE resenas, pagos, reservas, experiencia_bodega, experiencias, empleados, clientes, bodegas RESTART IDENTITY CASCADE;
+
 -- -------------------------
 -- BODEGAS PARTNER (7 reales)
 -- -------------------------
