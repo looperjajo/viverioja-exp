@@ -204,7 +204,8 @@ CREATE TABLE reservas (
     precio_total        NUMERIC(10,2) NOT NULL,
     canal_reserva       VARCHAR(50)   CHECK (canal_reserva IN (
                             'web','telefono','agencia',
-                            'qr_promo','presencial')),
+                            'qr_promo','presencial',
+                            'redes_sociales','feria')),
     codigo_promo        VARCHAR(50),
     estado              VARCHAR(30)   NOT NULL DEFAULT 'pendiente'
                         CHECK (estado IN (
