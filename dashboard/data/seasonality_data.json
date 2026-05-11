@@ -1,0 +1,67 @@
+{
+  "generado_en": "2025-10-15T09:23:41",
+  "fuente": "ViveRioja ETL Pipeline v1.0",
+  "anios_disponibles": [2023, 2024, 2025],
+  "kpis_estacionalidad": {
+    "mes_pico": "Septiembre",
+    "mes_pico_num": 9,
+    "mes_valle": "Enero",
+    "mes_valle_num": 1,
+    "trimestre_top": "Q3 (Jul-Sep)",
+    "dia_top": "Sabado",
+    "ingresos_pico": 14580.0,
+    "ingresos_valle": 2180.0,
+    "variacion_pct": 387.3,
+    "media_mensual": 7268.33,
+    "ingresos_total": 87220.0,
+    "meses_sobre_media": 6
+  },
+  "ingresos_por_mes": [
+    {"mes": 1,  "nombre_mes": "Ene", "nombre_completo": "Enero",     "ingresos": 2180.0,  "reservas": 3,  "ticket_medio": 726.67,  "tier_estandar": 872.0,  "tier_personalizada": 763.0,  "tier_premium": 545.0  },
+    {"mes": 2,  "nombre_mes": "Feb", "nombre_completo": "Febrero",   "ingresos": 2540.0,  "reservas": 3,  "ticket_medio": 846.67,  "tier_estandar": 1016.0, "tier_personalizada": 889.0,  "tier_premium": 635.0  },
+    {"mes": 3,  "nombre_mes": "Mar", "nombre_completo": "Marzo",     "ingresos": 4680.0,  "reservas": 5,  "ticket_medio": 936.0,   "tier_estandar": 1872.0, "tier_personalizada": 1638.0, "tier_premium": 1170.0 },
+    {"mes": 4,  "nombre_mes": "Abr", "nombre_completo": "Abril",     "ingresos": 7920.0,  "reservas": 8,  "ticket_medio": 990.0,   "tier_estandar": 3168.0, "tier_personalizada": 2772.0, "tier_premium": 1980.0 },
+    {"mes": 5,  "nombre_mes": "May", "nombre_completo": "Mayo",      "ingresos": 6840.0,  "reservas": 7,  "ticket_medio": 977.14,  "tier_estandar": 2736.0, "tier_personalizada": 2394.0, "tier_premium": 1710.0 },
+    {"mes": 6,  "nombre_mes": "Jun", "nombre_completo": "Junio",     "ingresos": 7560.0,  "reservas": 8,  "ticket_medio": 945.0,   "tier_estandar": 3024.0, "tier_personalizada": 2646.0, "tier_premium": 1890.0 },
+    {"mes": 7,  "nombre_mes": "Jul", "nombre_completo": "Julio",     "ingresos": 8640.0,  "reservas": 9,  "ticket_medio": 960.0,   "tier_estandar": 3456.0, "tier_personalizada": 2851.0, "tier_premium": 2333.0 },
+    {"mes": 8,  "nombre_mes": "Ago", "nombre_completo": "Agosto",    "ingresos": 9420.0,  "reservas": 10, "ticket_medio": 942.0,   "tier_estandar": 3580.0, "tier_personalizada": 3111.0, "tier_premium": 2729.0 },
+    {"mes": 9,  "nombre_mes": "Sep", "nombre_completo": "Septiembre","ingresos": 14580.0, "reservas": 14, "ticket_medio": 1041.43, "tier_estandar": 4374.0, "tier_personalizada": 5103.0, "tier_premium": 5103.0 },
+    {"mes": 10, "nombre_mes": "Oct", "nombre_completo": "Octubre",   "ingresos": 13320.0, "reservas": 13, "ticket_medio": 1024.62, "tier_estandar": 3996.0, "tier_personalizada": 4662.0, "tier_premium": 4662.0 },
+    {"mes": 11, "nombre_mes": "Nov", "nombre_completo": "Noviembre", "ingresos": 4320.0,  "reservas": 5,  "ticket_medio": 864.0,   "tier_estandar": 1728.0, "tier_personalizada": 1512.0, "tier_premium": 1080.0 },
+    {"mes": 12, "nombre_mes": "Dic", "nombre_completo": "Diciembre", "ingresos": 5220.0,  "reservas": 6,  "ticket_medio": 870.0,   "tier_estandar": 2088.0, "tier_personalizada": 1827.0, "tier_premium": 1305.0 }
+  ],
+  "comparativa_anual": {
+    "2023": [1853, 2159, 3978, 6732, 5814, 6426, 7344, 8007, 12393, 11322, 3672, 4437],
+    "2024": [2180, 2540, 4680, 7920, 6840, 7560, 8640, 9420, 14580, 13320, 4320, 5220],
+    "2025": [2507, 2921, 5382, 9108, 7866, 8694, 9936, 10833, 16767, 15318, 4968, 6003]
+  },
+  "totales_anuales": {
+    "2023": 74137,
+    "2024": 87220,
+    "2025": 100303
+  },
+  "reservas_por_dia_semana": [
+    {"dia_num": 1, "dia": "Lunes",     "num_reservas": 6,  "cancelaciones": 1, "tasa_cancelacion_pct": 16.7},
+    {"dia_num": 2, "dia": "Martes",    "num_reservas": 9,  "cancelaciones": 1, "tasa_cancelacion_pct": 11.1},
+    {"dia_num": 3, "dia": "Miercoles", "num_reservas": 14, "cancelaciones": 2, "tasa_cancelacion_pct": 14.3},
+    {"dia_num": 4, "dia": "Jueves",    "num_reservas": 17, "cancelaciones": 2, "tasa_cancelacion_pct": 11.8},
+    {"dia_num": 5, "dia": "Viernes",   "num_reservas": 28, "cancelaciones": 2, "tasa_cancelacion_pct":  7.1},
+    {"dia_num": 6, "dia": "Sabado",    "num_reservas": 33, "cancelaciones": 2, "tasa_cancelacion_pct":  6.1},
+    {"dia_num": 7, "dia": "Domingo",   "num_reservas": 15, "cancelaciones": 2, "tasa_cancelacion_pct": 13.3}
+  ],
+  "heatmap_mes_dia": [
+    [0, 0, 0, 0, 1, 1, 0],
+    [0, 0, 0, 0, 1, 1, 0],
+    [0, 0, 1, 1, 2, 2, 1],
+    [1, 1, 1, 1, 2, 3, 1],
+    [0, 1, 1, 1, 2, 2, 1],
+    [1, 1, 1, 2, 2, 3, 1],
+    [1, 1, 2, 2, 3, 3, 2],
+    [1, 1, 2, 2, 3, 4, 2],
+    [1, 2, 2, 3, 4, 5, 3],
+    [1, 1, 2, 3, 4, 5, 2],
+    [0, 0, 1, 1, 2, 2, 1],
+    [0, 1, 1, 1, 2, 2, 1]
+  ],
+  "pct_sobre_media": [-70.0, -65.0, -35.6, 9.0, -5.9, 4.0, 18.9, 29.6, 100.6, 83.3, -40.6, -28.2]
+}

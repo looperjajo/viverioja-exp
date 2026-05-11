@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ViveRioja — Dashboard de Estacionalidad</title>
+  <!--
+    DECISIÓN: Los datos vienen de seasonality_data.js (no .json con fetch).
+    Los navegadores bloquean fetch() sobre file:// por política CORS.
+    Cargar el archivo .js con <script src="..."> asigna los datos a
+    window.VIVERIOJA_DATA y funciona tanto en file:// como en GitHub Pages.
+    Patrón estándar en dashboards estáticos (D3.js, Observable, Vega-Lite).
+  -->
+  <script src="data/seasonality_data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --rojo:    #9f4040;
+      --dorado:  #C8A96E;
+      --crema:   #FAF8F5;
+      --gris:    #6B7280;
+      --borde:   #E5E7EB;
+      --texto:   #1F2937;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--crema); color: var(--texto); }
+
+    /* ── Header ── */
+    header {
+      background: var(--rojo); color: white;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .brand { display: flex; align-items: center; gap: .75rem; }
+    .logo-box {
+      height: 44px; width: auto;
+    }
+    .brand h1 { font-size: 1.2rem; font-weight: 700; }
+    .brand p  { font-size: .72rem; opacity: .8; margin-top: 1px; }
+    .ctrl { display: flex; align-items: center; gap: .5rem; font-size: .875rem; }
+    .ctrl select {
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+      color: white; padding: .35rem .75rem; border-radius: 6px; cursor: pointer; font-size: .875rem;
+    }
+    .ctrl select option { background: var(--rojo); }
+
+    /* ── Layout ── */
+    main { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
+
+    /* ── KPI Cards ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    @media(max-width:900px){ .kpi-grid { grid-template-columns: repeat(3,1fr); } }
+    @media(max-width:600px){ .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+    .kpi-card {
+      background: white; border-radius: 12px; padding: 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06); border-top: 3px solid var(--rojo);
+      opacity: 0; transform: translateY(16px);
+      transition: opacity .4s ease, transform .4s ease;
+    }
+    .kpi-card.vis { opacity: 1; transform: translateY(0); }
+    .kpi-card:nth-child(2){ transition-delay:.05s }
+    .kpi-card:nth-child(3){ transition-delay:.1s }
+    .kpi-card:nth-child(4){ transition-delay:.15s }
+    .kpi-card:nth-child(5){ transition-delay:.2s }
+    .kpi-label { font-size:.68rem; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--gris); margin-bottom:.4rem; }
+    .kpi-value { font-size:1.35rem; font-weight:700; color:var(--rojo); line-height:1; }
+    .kpi-sub   { font-size:.7rem; color:var(--gris); margin-top:.3rem; }
+
+    /* ── Chart sections ── */
+    .card {
+      background: white; border-radius: 12px; padding: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 1.5rem;
+    }
+    .card-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 1.25rem; flex-wrap: wrap; gap: .75rem;
+    }
+    .card-title { font-size: 1rem; font-weight: 700; }
+    .card-sub   { font-size: .75rem; color: var(--gris); margin-top: .15rem; }
+
+    /* Tier filter buttons */
+    .filters { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .fbtn {
+      padding: .28rem .7rem; border: 1.5px solid var(--borde);
+      background: white; border-radius: 20px; font-size: .72rem;
+      cursor: pointer; color: var(--gris); font-weight: 500;
+      transition: all .18s;
+    }
+    .fbtn.on, .fbtn:hover { background: var(--rojo); border-color: var(--rojo); color: white; }
+
+    /* Two-col grid */
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    @media(max-width:900px){ .row2 { grid-template-columns: 1fr; } }
+    .row2 .card { margin-bottom: 0; }
+
+    /* ── Heatmap ── */
+    .hm-grid {
+      display: grid;
+      grid-template-columns: 3.2rem repeat(7,1fr);
+      gap: 3px; font-size: .65rem;
+    }
+    .hm-cell {
+      height: 27px; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .hm-lbl  { color:var(--gris); font-weight:500; justify-content:flex-end; padding-right:.35rem; }
+    .hm-head { color:var(--gris); font-weight:600; height:20px; }
+    .hm-data { cursor:default; transition:transform .12s; }
+    .hm-data:hover { transform:scale(1.15); z-index:10; box-shadow:0 2px 8px rgba(159,64,64,.3); }
+    .hm-tip {
+      display:none; position:absolute; bottom:calc(100% + 5px); left:50%;
+      transform:translateX(-50%); background:#1F2937; color:white;
+      padding:.25rem .55rem; border-radius:5px; font-size:.65rem;
+      white-space:nowrap; z-index:100; pointer-events:none;
+    }
+    .hm-data:hover .hm-tip { display:block; }
+    .hm-legend { display:flex; align-items:center; gap:.5rem; margin-top:.75rem; font-size:.7rem; color:var(--gris); }
+    .hm-bar { flex:1; max-width:130px; height:7px; border-radius:4px; background:linear-gradient(to right,#FAF8F5,#9f4040); }
+
+    /* Year toggles */
+    .ytoggle { display:flex; gap:.4rem; flex-wrap:wrap; }
+    .ybtn {
+      display:flex; align-items:center; gap:.3rem;
+      padding:.22rem .55rem; border:1.5px solid; border-radius:20px;
+      font-size:.7rem; font-weight:600; cursor:pointer; transition:opacity .18s;
+    }
+    .ybtn.off { opacity:.35; }
+    .ydot { width:8px; height:8px; border-radius:50%; }
+
+    /* Insights */
+    .insights-card {
+      background:white; border-radius:12px; padding:1.5rem;
+      box-shadow:0 1px 4px rgba(0,0,0,.06); border-left:4px solid var(--dorado);
+    }
+    .ins-title { font-size:.95rem; font-weight:700; margin-bottom:1rem; }
+    .ins-list  { list-style:none; display:flex; flex-direction:column; gap:.65rem; }
+    .ins-item  {
+      display:flex; align-items:flex-start; gap:.75rem;
+      padding:.7rem .9rem; background:var(--crema); border-radius:8px;
+      font-size:.83rem; line-height:1.45;
+    }
+    .ins-ico { flex-shrink:0; font-size:.95rem; margin-top:1px; }
+    .ins-item strong { color:var(--rojo); }
+
+    footer { text-align:center; padding:1.5rem; color:var(--gris); font-size:.72rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <img class="logo-box" src="../img/logo-viverioja.png" alt="ViveRioja Experience">
+    <div>
+      <h1>ViveRioja Experience</h1>
+      <p>Dashboard de Estacionalidad — Ingresos · Reservas · Tendencias</p>
+    </div>
+  </div>
+  <div class="ctrl">
+    <label for="yr">Año:</label>
+    <select id="yr">
+      <option value="all">Todos los años</option>
+      <option value="2023">2023</option>
+      <option value="2024" selected>2024</option>
+      <option value="2025">2025</option>
+    </select>
+  </div>
+</header>
+
+<main>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-label">Mes Pico</div><div class="kpi-value" id="k-pico">—</div><div class="kpi-sub" id="k-pico-s">—</div></div>
+    <div class="kpi-card"><div class="kpi-label">Mes Valle</div><div class="kpi-value" id="k-valle">—</div><div class="kpi-sub" id="k-valle-s">—</div></div>
+    <div class="kpi-card"><div class="kpi-label">Trimestre Top</div><div class="kpi-value" id="k-trim">—</div><div class="kpi-sub">Mayor volumen acumulado</div></div>
+    <div class="kpi-card"><div class="kpi-label">Dia Top</div><div class="kpi-value" id="k-dia">—</div><div class="kpi-sub" id="k-dia-s">—</div></div>
+    <div class="kpi-card"><div class="kpi-label">Variacion Pico/Valle</div><div class="kpi-value" id="k-var">—</div><div class="kpi-sub">Temp. alta vs temp. baja</div></div>
+  </div>
+
+  <!-- Barras ingresos -->
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">Ingresos por mes</div>
+        <div class="card-sub">Barras = ingresos · Linea dorada = media mensual · Mas oscuro = por encima de la media</div>
+      </div>
+      <div class="filters">
+        <button class="fbtn on" data-t="all">Todos</button>
+        <button class="fbtn" data-t="estandar">Estandar</button>
+        <button class="fbtn" data-t="personalizada">Personalizada</button>
+        <button class="fbtn" data-t="premium">Premium</button>
+      </div>
+    </div>
+    <div style="position:relative;height:270px"><canvas id="c-bar"></canvas></div>
+  </div>
+
+  <!-- Heatmap + YoY -->
+  <div class="row2">
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Concentracion de reservas</div><div class="card-sub">Mes x dia de la semana · hover para detalle</div></div>
+      </div>
+      <div id="hm"></div>
+      <div class="hm-legend"><span>Pocas</span><div class="hm-bar"></div><span>Muchas</span></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Ingresos ano vs ano</div><div class="card-sub">2025 en trazo discontinuo (ano en curso)</div></div>
+        <div class="ytoggle" id="ytog"></div>
+      </div>
+      <div style="position:relative;height:230px"><canvas id="c-yoy"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Insights -->
+  <div class="insights-card">
+    <div class="ins-title">Insights automaticos — calculados desde los datos</div>
+    <ul class="ins-list" id="ins"></ul>
+  </div>
+
+</main>
+<footer><p>ViveRioja Experience S.L. · ETL Pipeline v1.0 · Datos: <span id="fdate"></span></p></footer>
+
+<script>
+// ── Guardia: verificar que los datos están cargados ──────────
+const D = window.VIVERIOJA_DATA;
+if (!D) {
+  document.body.innerHTML = '<div style="padding:2rem;color:#9f4040"><h2>Error: datos no encontrados.</h2><p>Asegurate de que <code>data/seasonality_data.js</code> existe. Ejecuta <code>python etl/pipeline.py</code> para regenerarlo.</p></div>';
+  throw new Error('VIVERIOJA_DATA no definido');
+}
+
+// ── Constantes ───────────────────────────────────────────────
+const MESES_C  = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const MESES_L  = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DIAS_C   = ['Lun','Mar','Mie','Jue','Vie','Sab','Dom'];
+const ROJO     = '#9f4040';
+const ROJO_A   = 'rgba(159,64,64,0.82)';
+const ROJO_L   = 'rgba(159,64,64,0.25)';
+const DORADO   = '#C8A96E';
+const ANIO_CFG = {
+  '2023': { color:'#9CA3AF', dash:[] },
+  '2024': { color:'#C8A96E', dash:[] },
+  '2025': { color:'#9f4040', dash:[6,3] }
+};
+
+// ── Formateadores ────────────────────────────────────────────
+const eur  = n => new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
+const eurD = n => new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',minimumFractionDigits:2}).format(n);
+
+// ── 1. KPI Cards ─────────────────────────────────────────────
+function renderKPIs() {
+  const k = D.kpis_estacionalidad;
+  document.getElementById('k-pico').textContent   = k.mes_pico;
+  document.getElementById('k-pico-s').textContent = eur(k.ingresos_pico) + ' historico';
+  document.getElementById('k-valle').textContent  = k.mes_valle;
+  document.getElementById('k-valle-s').textContent= eur(k.ingresos_valle) + ' historico';
+  document.getElementById('k-trim').textContent   = k.trimestre_top;
+  document.getElementById('k-dia').textContent    = k.dia_top;
+  const dias   = D.reservas_por_dia_semana;
+  const total  = dias.reduce((s,d)=>s+d.num_reservas,0);
+  const dTop   = dias.find(d=>d.dia===k.dia_top || d.dia.startsWith(k.dia_top.slice(0,3)));
+  const pct    = dTop ? (dTop.num_reservas/total*100).toFixed(1) : '?';
+  document.getElementById('k-dia-s').textContent  = pct + '% de todas las reservas';
+  document.getElementById('k-var').textContent    = '+' + k.variacion_pct.toFixed(1) + '%';
+  document.getElementById('fdate').textContent    = D.generado_en.replace('T',' ').slice(0,16);
+  setTimeout(()=>{ document.querySelectorAll('.kpi-card').forEach(c=>c.classList.add('vis')); }, 100);
+}
+
+// ── 2. Gráfico de barras ─────────────────────────────────────
+let chartBar = null;
+let anioSel  = 'all';
+let tierSel  = 'all';
+
+function getBarData(anio, tier) {
+  const m = D.ingresos_por_mes;
+  let vals;
+  if (anio === 'all') {
+    vals = m.map(r =>
+      tier==='all'          ? r.ingresos :
+      tier==='estandar'     ? r.tier_estandar :
+      tier==='personalizada'? r.tier_personalizada :
+                              r.tier_premium
+    );
+  } else {
+    const base = D.comparativa_anual[anio];
+    vals = m.map((r,i) => {
+      const tot = base[i];
+      if (tier==='all') return tot;
+      const ratio = r.ingresos > 0 ? tot/r.ingresos : 1;
+      if (tier==='estandar')      return Math.round(r.tier_estandar      * ratio);
+      if (tier==='personalizada') return Math.round(r.tier_personalizada  * ratio);
+                                  return Math.round(r.tier_premium         * ratio);
+    });
+  }
+  const media = vals.reduce((s,v)=>s+v,0)/12;
+  return { vals, media };
+}
+
+function initBar() {
+  const ctx = document.getElementById('c-bar').getContext('2d');
+  const { vals, media } = getBarData('all','all');
+  chartBar = new Chart(ctx, {
+    data: {
+      labels: MESES_C,
+      datasets: [
+        {
+          type:'bar', label:'Ingresos',
+          data: vals,
+          backgroundColor: vals.map(v => v>=media ? ROJO_A : ROJO_L),
+          borderColor:     vals.map(v => v>=media ? ROJO    : '#c08080'),
+          borderWidth: 1.5, borderRadius: 4, order: 2
+        },
+        {
+          type:'line', label:'Media mensual',
+          data: Array(12).fill(media),
+          borderColor: DORADO, borderWidth: 2,
+          borderDash: [8,4], pointRadius: 0, fill: false, order: 1
+        }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ labels:{ font:{size:11}, color:'#6B7280', boxWidth:16 } },
+        tooltip:{ callbacks:{
+          title: items => MESES_L[items[0].dataIndex],
+          label: item => {
+            if (item.datasetIndex===1) return ' Media: ' + eur(item.raw);
+            const r = D.ingresos_por_mes[item.dataIndex];
+            return [' Ingresos: '+eur(item.raw), ' Reservas: '+r.reservas, ' Ticket medio: '+eurD(r.ticket_medio)];
+          }
+        }}
+      },
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{size:11},color:'#6B7280'} },
+        y:{ grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:10},color:'#6B7280',callback:v=>eur(v)} }
+      },
+      animation:{ duration:600, easing:'easeOutQuart' }
+    }
+  });
+}
+
+function updateBar() {
+  const { vals, media } = getBarData(anioSel, tierSel);
+  chartBar.data.datasets[0].data            = vals;
+  chartBar.data.datasets[0].backgroundColor = vals.map(v=>v>=media?ROJO_A:ROJO_L);
+  chartBar.data.datasets[0].borderColor     = vals.map(v=>v>=media?ROJO:'#c08080');
+  chartBar.data.datasets[1].data            = Array(12).fill(media);
+  chartBar.update('active');
+}
+
+// ── 3. Heatmap ───────────────────────────────────────────────
+function lerp(a, b, t) { return Math.round(a + t*(b-a)); }
+function hmColor(val, max) {
+  const t = max>0 ? val/max : 0;
+  return `rgb(${lerp(250,159,t)},${lerp(248,64,t)},${lerp(245,64,t)})`;
+}
+
+function renderHeatmap() {
+  const hm  = D.heatmap_mes_dia;
+  const max = Math.max(...hm.flat());
+  const el  = document.getElementById('hm');
+  const g   = document.createElement('div');
+  g.className = 'hm-grid';
+
+  // Cabecera
+  g.appendChild(Object.assign(document.createElement('div'),{className:'hm-cell hm-head'}));
+  DIAS_C.forEach(d=>{
+    const c = Object.assign(document.createElement('div'),{className:'hm-cell hm-head', textContent:d});
+    c.style.textAlign='center'; g.appendChild(c);
+  });
+
+  // Filas
+  hm.forEach((fila,mi)=>{
+    const lbl = Object.assign(document.createElement('div'),{className:'hm-cell hm-lbl', textContent:MESES_C[mi]});
+    g.appendChild(lbl);
+    fila.forEach((v,di)=>{
+      const c = document.createElement('div');
+      c.className = 'hm-cell hm-data';
+      c.style.backgroundColor = hmColor(v,max);
+      if (v>0) {
+        const s = document.createElement('span');
+        s.style.cssText = `font-size:.62rem;font-weight:600;color:${v>max*.5?'white':'#6B7280'}`;
+        s.textContent = v; c.appendChild(s);
+      }
+      const tip = Object.assign(document.createElement('div'),{
+        className:'hm-tip',
+        textContent:`${MESES_L[mi]} · ${DIAS_C[di]}: ${v} reserva${v!==1?'s':''}`
+      });
+      c.appendChild(tip);
+      g.appendChild(c);
+    });
+  });
+  el.appendChild(g);
+}
+
+// ── 4. Gráfico YoY ───────────────────────────────────────────
+let chartYoY   = null;
+const visAnios = { '2023':true, '2024':true, '2025':true };
+
+function initYoY() {
+  const ctx = document.getElementById('c-yoy').getContext('2d');
+  const datasets = Object.entries(D.comparativa_anual).map(([a,data])=>{
+    const cfg = ANIO_CFG[a];
+    return {
+      label:a, data,
+      borderColor: cfg.color, borderDash: cfg.dash,
+      backgroundColor: cfg.color+'15',
+      borderWidth:2, pointRadius:3, pointBackgroundColor:cfg.color,
+      tension:.35, fill:false
+    };
+  });
+  chartYoY = new Chart(ctx,{
+    type:'line', data:{ labels:MESES_C, datasets },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{display:false},
+        tooltip:{ callbacks:{
+          title: items=>MESES_L[items[0].dataIndex],
+          label: item=>` ${item.dataset.label}: ${eur(item.raw)}`
+        }}
+      },
+      scales:{
+        x:{ grid:{display:false}, ticks:{font:{size:10},color:'#6B7280'} },
+        y:{ grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:10},color:'#6B7280',callback:v=>eur(v)} }
+      },
+      animation:{ duration:700, easing:'easeOutQuart' }
+    }
+  });
+
+  // Botones toggle
+  const cont = document.getElementById('ytog');
+  Object.entries(ANIO_CFG).forEach(([a,cfg])=>{
+    const btn = document.createElement('button');
+    btn.className='ybtn'; btn.dataset.anio=a;
+    btn.style.cssText=`color:${cfg.color};border-color:${cfg.color}`;
+    btn.innerHTML=`<span class="ydot" style="background:${cfg.color}"></span>${a}`;
+    btn.addEventListener('click',()=>{
+      visAnios[a]=!visAnios[a];
+      btn.classList.toggle('off',!visAnios[a]);
+      const ds=chartYoY.data.datasets.find(d=>d.label===a);
+      if(ds){ ds.hidden=!visAnios[a]; chartYoY.update(); }
+    });
+    cont.appendChild(btn);
+  });
+}
+
+// ── 5. Insights ──────────────────────────────────────────────
+function renderInsights() {
+  const k    = D.kpis_estacionalidad;
+  const pct  = D.pct_sobre_media;
+  const dias = D.reservas_por_dia_semana;
+  const tot  = D.totales_anuales;
+
+  const pctPico = pct[k.mes_pico_num-1];
+  const dMax    = dias.reduce((a,b)=>b.num_reservas>a.num_reservas?b:a);
+  const totRes  = dias.reduce((s,d)=>s+d.num_reservas,0);
+  const pctDia  = (dMax.num_reservas/totRes*100).toFixed(1);
+  const anios   = Object.keys(tot).sort();
+  const ult     = anios[anios.length-1];
+  const pen     = anios[anios.length-2];
+  const crec    = ((tot[ult]-tot[pen])/tot[pen]*100).toFixed(1);
+
+  const items = [
+    { ico:'📅', html:`<strong>${k.mes_pico}</strong> genera un <strong>+${pctPico.toFixed(1)}%</strong> mas que la media mensual (${eur(k.ingresos_pico)}). La vendimia riojana atrae turismo europeo de alto poder adquisitivo que no puede reemplazarse en otro mes del ano.` },
+    { ico:'📆', html:`Los <strong>${dMax.dia}s</strong> concentran el <strong>${pctDia}%</strong> de todas las reservas semanales con la tasa de cancelacion mas baja (${dMax.tasa_cancelacion_pct}%). Refuerza disponibilidad y personal ese dia durante la temporada alta.` },
+    { ico:'📈', html:`Los ingresos de <strong>${ult}</strong> crecieron un <strong>+${crec}%</strong> respecto a <strong>${pen}</strong> (${eur(tot[pen])} → ${eur(tot[ult])}). El crecimiento es consistente con la tendencia del enoturismo premium en Espana.` }
+  ];
+
+  const lista = document.getElementById('ins');
+  items.forEach(({ico,html})=>{
+    const li = document.createElement('li');
+    li.className='ins-item';
+    li.innerHTML=`<span class="ins-ico">${ico}</span><span>${html}</span>`;
+    lista.appendChild(li);
+  });
+}
+
+// ── 6. Eventos de filtro ─────────────────────────────────────
+document.getElementById('yr').addEventListener('change', function(){
+  anioSel = this.value; updateBar();
+});
+document.querySelectorAll('.fbtn').forEach(btn=>{
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('on'));
+    this.classList.add('on');
+    tierSel = this.dataset.t; updateBar();
+  });
+});
+
+// ── INIT ─────────────────────────────────────────────────────
+renderKPIs();
+initBar();
+renderHeatmap();
+initYoY();
+renderInsights();
+</script>
+</body>
+</html>

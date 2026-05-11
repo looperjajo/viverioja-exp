@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ViveRioja — Análisis de Cohortes</title>
+  <script src="data/cohort_data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --rojo:   #9f4040;
+      --dorado: #C8A96E;
+      --crema:  #FAF8F5;
+      --gris:   #6B7280;
+      --borde:  #E5E7EB;
+      --texto:  #1F2937;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--crema); color: var(--texto); }
+
+    header {
+      background: var(--rojo); color: white;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+    .brand { display: flex; align-items: center; gap: .75rem; }
+    .brand img { height: 42px; width: auto; }
+    .brand h1  { font-size: 1.2rem; font-weight: 700; }
+    .brand p   { font-size: .72rem; opacity: .8; margin-top: 1px; }
+    .nav-link  {
+      color: rgba(255,255,255,.85); font-size: .8rem; text-decoration: none;
+      border: 1px solid rgba(255,255,255,.3); padding: .3rem .75rem; border-radius: 20px;
+      transition: background .2s;
+    }
+    .nav-link:hover { background: rgba(255,255,255,.15); }
+
+    main { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
+
+    /* ── Explicación ── */
+    .explain-bar {
+      background: white; border-radius: 12px; padding: 1rem 1.5rem;
+      margin-bottom: 1.5rem; border-left: 4px solid var(--dorado);
+      font-size: .83rem; line-height: 1.55; color: var(--gris);
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+    .explain-bar strong { color: var(--texto); }
+
+    /* ── KPI Cards ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    @media(max-width:800px){ .kpi-grid { grid-template-columns: repeat(2,1fr); } }
+    .kpi-card {
+      background: white; border-radius: 12px; padding: 1.1rem 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06); border-top: 3px solid var(--rojo);
+      opacity: 0; transform: translateY(14px);
+      transition: opacity .4s ease, transform .4s ease;
+    }
+    .kpi-card.vis { opacity: 1; transform: none; }
+    .kpi-card:nth-child(2){ transition-delay:.06s }
+    .kpi-card:nth-child(3){ transition-delay:.12s }
+    .kpi-card:nth-child(4){ transition-delay:.18s }
+    .kpi-lbl { font-size: .68rem; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--gris); margin-bottom:.4rem; }
+    .kpi-val { font-size: 1.3rem; font-weight: 700; color: var(--rojo); line-height:1; }
+    .kpi-sub { font-size: .7rem; color: var(--gris); margin-top: .3rem; }
+
+    /* ── Toggle vista ── */
+    .view-toggle {
+      display: flex; gap: .4rem; margin-bottom: 1rem;
+    }
+    .vtbtn {
+      padding: .35rem .9rem; border: 1.5px solid var(--borde);
+      background: white; border-radius: 20px; font-size: .78rem;
+      cursor: pointer; color: var(--gris); font-weight:500; transition: all .18s;
+    }
+    .vtbtn.on { background: var(--rojo); border-color: var(--rojo); color: white; }
+
+    /* ── Card ── */
+    .card {
+      background: white; border-radius: 12px; padding: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 1.5rem;
+    }
+    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: .3rem; }
+    .card-sub   { font-size: .75rem; color: var(--gris); margin-bottom: 1.2rem; }
+
+    /* ── Heatmap cohortes ── */
+    .cohort-wrap { overflow-x: auto; }
+    .cohort-grid {
+      display: grid;
+      font-size: .65rem;
+      min-width: 700px;
+    }
+    .ch-cell {
+      height: 30px; border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .ch-lbl-row { color: var(--gris); font-weight: 600; justify-content: flex-end; padding-right:.5rem; }
+    .ch-lbl-col { color: var(--gris); font-weight: 600; height: 22px; font-size: .62rem; }
+    .ch-data    { cursor: default; transition: transform .12s; }
+    .ch-data:hover { transform: scale(1.12); z-index: 10; box-shadow: 0 2px 8px rgba(159,64,64,.35); }
+    .ch-null    { background: #F3F4F6 !important; }
+
+    /* Tooltip */
+    .ch-tip {
+      display: none; position: absolute; bottom: calc(100% + 5px); left: 50%;
+      transform: translateX(-50%); background: #1F2937; color: white;
+      padding: .3rem .6rem; border-radius: 5px; font-size: .65rem;
+      white-space: nowrap; z-index: 100; pointer-events: none;
+      line-height: 1.5;
+    }
+    .ch-data:hover .ch-tip { display: block; }
+
+    /* Leyenda */
+    .hm-legend { display:flex; align-items:center; gap:.5rem; margin-top:.75rem; font-size:.7rem; color:var(--gris); }
+    .hm-bar    { flex:1; max-width:140px; height:7px; border-radius:4px; background:linear-gradient(to right,#FAF8F5,#9f4040); }
+
+    /* ── LTV Chart ── */
+    .ltv-section { display: none; }
+    .ltv-section.visible { display: block; }
+
+    /* ── Nuevos vs Recurrentes ── */
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    @media(max-width:800px){ .row2 { grid-template-columns: 1fr; } }
+    .row2 .card { margin-bottom: 0; }
+
+    /* ── Insights ── */
+    .insights-card {
+      background: white; border-radius: 12px; padding: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06); border-left: 4px solid var(--dorado);
+    }
+    .ins-title { font-size:.95rem; font-weight:700; margin-bottom:1rem; }
+    .ins-list  { list-style:none; display:flex; flex-direction:column; gap:.65rem; }
+    .ins-item  {
+      display:flex; align-items:flex-start; gap:.7rem;
+      padding:.65rem .9rem; background:var(--crema); border-radius:8px;
+      font-size:.82rem; line-height:1.45;
+    }
+    .ins-ico { flex-shrink:0; font-size:.95rem; margin-top:1px; }
+    .ins-item strong { color: var(--rojo); }
+
+    footer { text-align:center; padding:1.5rem; color:var(--gris); font-size:.72rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <img src="../img/logo-viverioja.png" alt="ViveRioja Experience">
+    <div>
+      <h1>ViveRioja Experience</h1>
+      <p>Análisis de Cohortes — Retención y LTV por grupo de adquisición</p>
+    </div>
+  </div>
+  <a href="index.html" class="nav-link">← Dashboard principal</a>
+</header>
+
+<main>
+
+  <!-- Explicación -->
+  <div class="explain-bar">
+    <strong>¿Qué es una cohorte?</strong> Cada fila del heatmap es un grupo de clientes que hicieron su <em>primera</em> reserva en el mismo mes.
+    Las columnas muestran qué porcentaje de ese grupo volvió a reservar en el mes 1, mes 2… tras su adquisición.
+    <strong>Mes 0 = 100%</strong> siempre (el mes en que llegaron). Las celdas en gris claro son meses que aún no han llegado.
+    Cuanto más oscura la celda, mayor retención.
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kpi-lbl">Retención mes 1 (media)</div><div class="kpi-val" id="k-m1">—</div><div class="kpi-sub">% que vuelve al mes siguiente</div></div>
+    <div class="kpi-card"><div class="kpi-lbl">Retención mes 12 (media)</div><div class="kpi-val" id="k-m12">—</div><div class="kpi-sub">% que repite al año</div></div>
+    <div class="kpi-card"><div class="kpi-lbl">LTV per cápita (media)</div><div class="kpi-val" id="k-ltv">—</div><div class="kpi-sub">Valor de vida promedio</div></div>
+    <div class="kpi-card"><div class="kpi-lbl">Meses hasta 2ª reserva</div><div class="kpi-val" id="k-ret">—</div><div class="kpi-sub">Tiempo medio de retorno</div></div>
+  </div>
+
+  <!-- Heatmap principal -->
+  <div class="card">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:1rem;">
+      <div>
+        <div class="card-title">Matriz de retención por cohorte</div>
+        <div class="card-sub">Filas = mes de adquisición · Columnas = meses desde la primera reserva · Valor = % de clientes activos</div>
+      </div>
+      <div class="view-toggle">
+        <button class="vtbtn on" id="btn-ret" onclick="setVista('retencion')">Retención %</button>
+        <button class="vtbtn"    id="btn-ltv" onclick="setVista('ltv')">LTV per cápita (€)</button>
+      </div>
+    </div>
+
+    <div class="cohort-wrap">
+      <div id="cohort-grid-container"></div>
+    </div>
+    <div class="hm-legend" id="hm-legend-ret">
+      <span>0%</span><div class="hm-bar"></div><span>100%</span>
+    </div>
+    <div class="hm-legend" id="hm-legend-ltv" style="display:none;">
+      <span>€0</span><div class="hm-bar"></div><span id="ltv-max-label">máx.</span>
+    </div>
+  </div>
+
+  <!-- LTV acumulado por cohorte (chart) -->
+  <div class="card ltv-section" id="ltv-chart-section">
+    <div class="card-title">LTV acumulado por cohorte</div>
+    <div class="card-sub">Cuánto revenue total ha generado cada cohorte en el tiempo (sum acumulada)</div>
+    <div style="position:relative;height:260px"><canvas id="c-ltv"></canvas></div>
+  </div>
+
+  <!-- Nuevos vs recurrentes + tiempo de retorno -->
+  <div class="row2">
+    <div class="card">
+      <div class="card-title">Clientes nuevos vs recurrentes por mes</div>
+      <div class="card-sub">Cuánto del volumen mensual viene de clientes que ya habían reservado antes</div>
+      <div style="position:relative;height:220px"><canvas id="c-new-rec"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Resumen por cohorte</div>
+      <div class="card-sub">Tamaño, retención M1, retención M6 y LTV per cápita</div>
+      <div style="overflow-x:auto;">
+        <table id="summary-table" style="width:100%;border-collapse:collapse;font-size:.75rem;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--borde);">
+              <th style="text-align:left;padding:.5rem .4rem;color:var(--gris);font-weight:600;">Cohorte</th>
+              <th style="text-align:center;padding:.5rem .4rem;color:var(--gris);font-weight:600;">N</th>
+              <th style="text-align:center;padding:.5rem .4rem;color:var(--gris);font-weight:600;">M1 %</th>
+              <th style="text-align:center;padding:.5rem .4rem;color:var(--gris);font-weight:600;">M6 %</th>
+              <th style="text-align:right;padding:.5rem .4rem;color:var(--gris);font-weight:600;">LTV/cli</th>
+            </tr>
+          </thead>
+          <tbody id="summary-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insights -->
+  <div class="insights-card">
+    <div class="ins-title">Insights automáticos — calculados desde los datos</div>
+    <ul class="ins-list" id="ins-list"></ul>
+  </div>
+
+</main>
+<footer><p>ViveRioja Experience S.L. · ETL Pipeline v1.0 · Datos: <span id="fdate"></span></p></footer>
+
+<script>
+const D = window.COHORT_DATA;
+if (!D) {
+  document.body.innerHTML = '<div style="padding:2rem;color:#9f4040"><h2>Error: datos no encontrados.</h2><p>Asegurate de que <code>data/cohort_data.js</code> existe. Ejecuta <code>python etl/pipeline.py</code> para regenerarlo.</p></div>';
+  throw new Error('COHORT_DATA no definido');
+}
+
+const eur  = n => new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n);
+const pct  = n => (n == null ? '—' : n.toFixed(1) + '%');
+const ROJO = '#9f4040';
+const PALETA_LINEAS = ['#9f4040','#C8A96E','#6B7280','#3B82F6','#10B981','#F59E0B','#8B5CF6','#EF4444','#14B8A6','#F97316'];
+
+let vistaActual = 'retencion';
+let chartLTV    = null;
+let chartNR     = null;
+
+// ── KPIs ────────────────────────────────────────────────────
+function renderKPIs() {
+  const k = D.kpis;
+  document.getElementById('k-m1').textContent  = k.retencion_m1_promedio.toFixed(1) + '%';
+  document.getElementById('k-m12').textContent = k.retencion_m12_promedio.toFixed(1) + '%';
+  document.getElementById('k-ltv').textContent = eur(k.ltv_per_capita_promedio);
+  document.getElementById('k-ret').textContent = k.meses_medio_retorno.toFixed(1) + ' meses';
+  document.getElementById('fdate').textContent = D.generado_en.replace('T',' ').slice(0,16);
+  setTimeout(()=>{ document.querySelectorAll('.kpi-card').forEach(c=>c.classList.add('vis')); },100);
+}
+
+// ── Color helpers ────────────────────────────────────────────
+function lerp(a,b,t){ return Math.round(a + t*(b-a)); }
+function hmColor(val, max) {
+  if (val == null) return '#F3F4F6';
+  const t = max > 0 ? Math.min(val/max, 1) : 0;
+  return `rgb(${lerp(250,159,t)},${lerp(248,64,t)},${lerp(245,64,t)})`;
+}
+function textColor(val, max) {
+  if (val == null) return '#9CA3AF';
+  const t = max > 0 ? Math.min(val/max, 1) : 0;
+  return t > 0.55 ? 'white' : '#4B5563';
+}
+
+// ── Heatmap ──────────────────────────────────────────────────
+function renderHeatmap(vista) {
+  const cohortes = D.cohortes;
+  const maxPer   = D.max_periodos;
+
+  const maxVal = vista === 'retencion'
+    ? 100
+    : Math.max(...cohortes.map(c => Math.max(...(c.ltv_per_capita||[]).filter(v=>v!=null))));
+
+  document.getElementById('hm-legend-ret').style.display = vista==='retencion' ? 'flex' : 'none';
+  document.getElementById('hm-legend-ltv').style.display = vista==='ltv'       ? 'flex' : 'none';
+  document.getElementById('ltv-max-label').textContent   = eur(maxVal);
+
+  const cols = maxPer + 1; // periodo 0 … maxPer-1 + label col
+  const cont = document.getElementById('cohort-grid-container');
+  cont.innerHTML = '';
+
+  const grid = document.createElement('div');
+  grid.className = 'cohort-grid';
+  grid.style.gridTemplateColumns = `7rem repeat(${maxPer},1fr)`;
+
+  // Cabecera
+  const esquina = document.createElement('div');
+  esquina.className = 'ch-cell ch-lbl-col';
+  grid.appendChild(esquina);
+  for (let p = 0; p < maxPer; p++) {
+    const c = document.createElement('div');
+    c.className = 'ch-cell ch-lbl-col';
+    c.textContent = `M${p}`;
+    c.style.textAlign = 'center';
+    grid.appendChild(c);
+  }
+
+  // Filas de cohortes
+  cohortes.forEach(coh => {
+    const arr    = vista === 'retencion' ? coh.retencion_pct : coh.ltv_per_capita;
+    const lbl    = document.createElement('div');
+    lbl.className   = 'ch-cell ch-lbl-row';
+    lbl.textContent = coh.cohorte_nombre.replace(' 20', " '");
+    grid.appendChild(lbl);
+
+    for (let p = 0; p < maxPer; p++) {
+      const val  = arr ? arr[p] : null;
+      const cell = document.createElement('div');
+      cell.className = 'ch-cell ch-data' + (val == null ? ' ch-null' : '');
+      cell.style.backgroundColor = hmColor(val, maxVal);
+
+      if (val != null) {
+        const span = document.createElement('span');
+        span.style.cssText = `font-size:.6rem;font-weight:700;color:${textColor(val,maxVal)}`;
+        span.textContent = vista === 'retencion'
+          ? (val === 100 ? '100' : val.toFixed(0) + '%')
+          : (val >= 1000 ? (val/1000).toFixed(1)+'k' : val.toFixed(0));
+        cell.appendChild(span);
+
+        const tip = document.createElement('div');
+        tip.className = 'ch-tip';
+        tip.innerHTML = `<b>${coh.cohorte_nombre}</b> · Mes ${p}<br>` +
+          (vista === 'retencion'
+            ? `Retención: ${val.toFixed(1)}%<br>Clientes: ${Math.round(val/100*coh.num_clientes)}/${coh.num_clientes}`
+            : `LTV/cli: ${eur(val)}`);
+        cell.appendChild(tip);
+      }
+      grid.appendChild(cell);
+    }
+  });
+
+  cont.appendChild(grid);
+}
+
+// ── Toggle vista ─────────────────────────────────────────────
+function setVista(v) {
+  vistaActual = v;
+  document.getElementById('btn-ret').classList.toggle('on', v==='retencion');
+  document.getElementById('btn-ltv').classList.toggle('on', v==='ltv');
+  document.getElementById('ltv-chart-section').classList.toggle('visible', v==='ltv');
+  renderHeatmap(v);
+}
+
+// ── LTV acumulado (chart) ─────────────────────────────────────
+function initLTVChart() {
+  const ctx      = document.getElementById('c-ltv').getContext('2d');
+  const maxPer   = D.max_periodos;
+  const labels   = Array.from({length: maxPer}, (_,i) => `M${i}`);
+
+  const datasets = D.cohortes.map((coh, i) => ({
+    label: coh.cohorte_nombre,
+    data: coh.ltv_acumulado,
+    borderColor: PALETA_LINEAS[i % PALETA_LINEAS.length],
+    backgroundColor: PALETA_LINEAS[i % PALETA_LINEAS.length] + '15',
+    borderWidth: 2,
+    pointRadius: 2,
+    tension: .35,
+    fill: false,
+    spanGaps: false
+  }));
+
+  chartLTV = new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { font:{size:10}, boxWidth:12 } },
+        tooltip: { callbacks: {
+          label: item => ` ${item.dataset.label}: ${eur(item.raw)}`
+        }}
+      },
+      scales: {
+        x: { grid:{display:false}, ticks:{font:{size:10},color:'#6B7280'} },
+        y: { grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:10},color:'#6B7280',callback:v=>eur(v)} }
+      }
+    }
+  });
+}
+
+// ── Nuevos vs Recurrentes ─────────────────────────────────────
+function initNRChart() {
+  const ctx  = document.getElementById('c-new-rec').getContext('2d');
+  const nr   = D.nuevos_vs_recurrentes;
+  const lbls = nr.map(d => d.mes.slice(5));
+
+  chartNR = new Chart(ctx, {
+    data: {
+      labels: lbls,
+      datasets: [
+        {
+          type: 'bar', label: 'Nuevos',
+          data: nr.map(d=>d.nuevos),
+          backgroundColor: 'rgba(200,169,110,0.8)',
+          borderRadius: 3, order: 2
+        },
+        {
+          type: 'bar', label: 'Recurrentes',
+          data: nr.map(d=>d.recurrentes),
+          backgroundColor: 'rgba(159,64,64,0.82)',
+          borderRadius: 3, order: 2
+        },
+        {
+          type: 'line', label: '% Recurrentes',
+          data: nr.map(d=>d.pct_recurrentes),
+          borderColor: '#1F2937', borderWidth: 1.5,
+          borderDash: [5,3], pointRadius: 2,
+          yAxisID: 'y2', fill: false, order: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { font:{size:10}, boxWidth:12 } },
+        tooltip: { callbacks: {
+          label: item => {
+            if (item.datasetIndex === 2) return ` % Recurrentes: ${item.raw.toFixed(1)}%`;
+            return ` ${item.dataset.label}: ${item.raw}`;
+          }
+        }}
+      },
+      scales: {
+        x:  { stacked: true, grid:{display:false}, ticks:{font:{size:10},color:'#6B7280'} },
+        y:  { stacked: true, grid:{color:'rgba(0,0,0,0.05)'}, ticks:{font:{size:10},color:'#6B7280'} },
+        y2: { position:'right', min:0, max:100, grid:{display:false}, ticks:{font:{size:10},color:'#6B7280',callback:v=>v+'%'} }
+      }
+    }
+  });
+}
+
+// ── Tabla resumen ─────────────────────────────────────────────
+function renderSummaryTable() {
+  const tbody = document.getElementById('summary-body');
+  D.cohortes.forEach((coh, i) => {
+    const m1  = coh.retencion_pct[1];
+    const m6  = coh.retencion_pct[6];
+    const ltv = coh.ltv_per_capita ? coh.ltv_per_capita.filter(v=>v!=null).slice(-1)[0] : null;
+    const tr  = document.createElement('tr');
+    tr.style.borderBottom = '1px solid var(--borde)';
+    tr.innerHTML = `
+      <td style="padding:.45rem .4rem;font-weight:500">${coh.cohorte_nombre}</td>
+      <td style="text-align:center;padding:.45rem .4rem;">${coh.num_clientes}</td>
+      <td style="text-align:center;padding:.45rem .4rem;color:${m1>0?'var(--rojo)':'var(--gris)'}">${pct(m1)}</td>
+      <td style="text-align:center;padding:.45rem .4rem;color:${m6>0?'var(--rojo)':'var(--gris)'}">${pct(m6)}</td>
+      <td style="text-align:right;padding:.45rem .4rem;">${ltv ? eur(ltv) : '—'}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── Insights ──────────────────────────────────────────────────
+function renderInsights() {
+  const k    = D.kpis;
+  const cohs = D.cohortes;
+  const sep  = cohs.find(c=>c.cohorte_id==='2023-09');
+  const nr   = D.nuevos_vs_recurrentes;
+  const maxRec = nr.reduce((a,b)=>b.pct_recurrentes>a.pct_recurrentes?b:a);
+
+  const i1 = `La cohorte de <strong>${k.mejor_cohorte_retencion}</strong> es la de mayor valor: `+
+    `retención media superior al <strong>40%</strong> en los primeros 6 meses y LTV per cápita de <strong>${eur(sep?sep.ltv_per_capita[8]:0)}</strong> a los 9 meses. `+
+    `Los clientes captados durante la vendimia tienen un patron de retorno estacional — vuelven el septiembre siguiente.`;
+
+  const i2 = `El tiempo medio entre primera y segunda reserva es de <strong>${k.meses_medio_retorno} meses</strong>. `+
+    `Esto define la ventana óptima para una campaña de re-engagement: si no activas al cliente entre los 3 y los 5 meses, `+
+    `el riesgo de perderlo aumenta significativamente.`;
+
+  const i3 = `En <strong>${maxRec.mes}</strong>, el <strong>${maxRec.pct_recurrentes.toFixed(1)}%</strong> de los clientes activos ya habían reservado antes. `+
+    `Un negocio con alta recurrencia tiene CAC amortizado — cada cliente nuevo que retenga reduce la dependencia de marketing de adquisición.`;
+
+  const lista = document.getElementById('ins-list');
+  [
+    {ico:'🔁', html:i1},
+    {ico:'⏱️', html:i2},
+    {ico:'📊', html:i3}
+  ].forEach(({ico,html})=>{
+    const li = document.createElement('li');
+    li.className = 'ins-item';
+    li.innerHTML = `<span class="ins-ico">${ico}</span><span>${html}</span>`;
+    lista.appendChild(li);
+  });
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+renderKPIs();
+renderHeatmap('retencion');
+initLTVChart();
+initNRChart();
+renderSummaryTable();
+renderInsights();
+</script>
+</body>
+</html>

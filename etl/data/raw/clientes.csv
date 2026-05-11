@@ -1,0 +1,36 @@
+id,nombre,apellidos,email,telefono,fecha_nacimiento,nacionalidad,ciudad,pais,canal_adquisicion,fecha_registro,activo
+1,María,González López,maria.gonzalez@gmail.com,+34 612 345 678,1988-03-12,ES,Madrid,España,web,2023-01-15 00:00:00+01:00,True
+2,Javier,Martínez Ruiz,javier.martinez@hotmail.com,+34 634 567 890,1975-07-22,ES,Bilbao,España,redes_sociales,2023-02-20 00:00:00+01:00,True
+3,Carmen,Rodríguez Pérez,carmen.rodriguez@outlook.com,+34 656 789 012,1990-11-05,ES,Barcelona,España,referido,2023-03-10 00:00:00+01:00,True
+4,Antonio,López García,antonio.lopez@gmail.com,+34 678 901 234,1965-04-18,ES,Valencia,España,agencia,2023-04-05 00:00:00+02:00,True
+5,Isabel,Fernández Torres,isabel.fernandez@yahoo.es,+34 600 123 456,1982-09-30,ES,Logroño,España,web,2023-04-12 00:00:00+02:00,True
+6,Pablo,Sánchez Moreno,pablo.sanchez@gmail.com,+34 622 345 678,1993-06-15,ES,Zaragoza,España,redes_sociales,2023-05-08 00:00:00+02:00,True
+7,Lucía,Ramírez Jiménez,lucia.ramirez@icloud.com,+34 644 567 890,1987-12-01,ES,Pamplona,España,web,2023-06-01 00:00:00+02:00,True
+8,Diego,Hernández Castro,diego.hernandez@gmail.com,+34 666 789 012,1979-08-14,ES,Sevilla,España,feria,2023-06-15 00:00:00+02:00,True
+9,Marta,Jiménez Vega,marta.jimenez@gmail.com,+34 688 901 234,1995-02-28,ES,Vitoria,España,referido,2023-07-20 00:00:00+02:00,True
+10,Sergio,Torres Blanco,sergio.torres@hotmail.com,+34 610 234 567,1970-10-09,ES,San Sebastián,España,web,2023-08-05 00:00:00+02:00,True
+11,Sophie,Dubois Martin,sophie.dubois@laposte.net,+33 612 345 678,1985-05-20,FR,Paris,Francia,web,2023-05-15 00:00:00+02:00,True
+12,Thomas,Müller Schmidt,thomas.muller@gmx.de,+49 170 123 4567,1978-03-08,DE,Múnich,Alemania,agencia,2023-07-10 00:00:00+02:00,True
+13,Emma,Wilson Johnson,emma.wilson@gmail.com,+44 7911 123456,1991-11-17,GB,Londres,Reino Unido,web,2023-08-20 00:00:00+02:00,True
+14,Luca,Rossi Ferrari,luca.rossi@libero.it,+39 347 123 4567,1983-06-25,IT,Milán,Italia,redes_sociales,2023-09-05 00:00:00+02:00,True
+15,Anna,Van den Berg,anna.vandenberg@gmail.com,+31 612 345 678,1990-01-14,NL,Ámsterdam,Países Bajos,agencia,2023-10-01 00:00:00+02:00,True
+16,Michael,Thompson Davis,michael.thompson@outlook.com,+1 917 555 0123,1968-07-30,US,Nueva York,EEUU,web,2023-11-15 00:00:00+01:00,True
+17,Yuki,Tanaka Watanabe,yuki.tanaka@docomo.ne.jp,+81 80 1234 5678,1986-04-12,JP,Tokio,Japón,agencia,2024-01-20 00:00:00+01:00,True
+18,Ana Carolina,Silva Pereira,anacarolina.silva@gmail.com,+55 11 98765 4321,1992-09-03,BR,São Paulo,Brasil,redes_sociales,2024-02-10 00:00:00+01:00,True
+19,Roberto,Álvarez Navarro,roberto.alvarez@gmail.com,+34 632 456 789,1960-12-20,ES,Madrid,España,referido,2022-11-01 00:00:00+01:00,True
+20,Patricia,Moreno García,patricia.moreno@gmail.com,+34 654 678 901,1977-04-05,ES,Bilbao,España,web,2022-12-15 00:00:00+01:00,True
+21,Eduardo,Ruiz Castillo,eduardo.ruiz@empresa.com,+34 676 890 123,1969-08-17,ES,Madrid,España,agencia,2023-01-08 00:00:00+01:00,True
+22,Natalia,Iglesias Prado,natalia.iglesias@gmail.com,+34 698 012 345,1994-03-22,ES,La Coruña,España,redes_sociales,2023-09-12 00:00:00+02:00,True
+23,Álvaro,Cruz Medina,alvaro.cruz@hotmail.com,+34 611 234 567,1988-07-11,ES,Málaga,España,web,2023-10-20 00:00:00+02:00,True
+24,Cristina,Molina Ramos,cristina.molina@gmail.com,+34 633 456 789,1984-01-29,ES,Valladolid,España,feria,2023-11-05 00:00:00+01:00,True
+25,Víctor,Ortega Serrano,victor.ortega@outlook.com,+34 655 678 901,1971-05-16,ES,Burgos,España,referido,2023-12-01 00:00:00+01:00,True
+26,Laura,Gil Fuentes,laura.gil@gmail.com,+34 677 890 123,1996-10-08,ES,Logroño,España,web,2024-01-10 00:00:00+01:00,True
+27,Carlos,Herrera Montoya,carlos.herrera@gmail.com,+34 699 012 345,1980-02-14,ES,Bilbao,España,redes_sociales,2024-02-25 00:00:00+01:00,True
+28,Beatriz,Santos Nieto,beatriz.santos@yahoo.es,+34 612 345 679,1989-06-03,ES,Madrid,España,web,2024-03-15 00:00:00+01:00,True
+29,Jorge,Reyes Domínguez,jorge.reyes@gmail.com,+34 634 567 891,1974-11-27,ES,Zaragoza,España,agencia,2024-04-01 00:00:00+02:00,True
+30,Silvia,Vargas Campos,silvia.vargas@gmail.com,+34 656 789 013,1991-08-19,ES,Valencia,España,web,2024-05-10 00:00:00+02:00,True
+31,François,Leroy Dupont,francois.leroy@orange.fr,+33 698 765 432,1975-12-04,FR,Lyon,Francia,agencia,2024-06-01 00:00:00+02:00,True
+32,Ingrid,Hansen Nielsen,ingrid.hansen@gmail.com,+45 20 123 456,1987-03-15,DK,Copenhague,Dinamarca,web,2024-07-20 00:00:00+02:00,True
+33,Marco,Bianchi Conti,marco.bianchi@gmail.com,+39 333 987 6543,1982-09-09,IT,Roma,Italia,redes_sociales,2024-08-05 00:00:00+02:00,True
+34,Elena,Popescu Ionescu,elena.popescu@gmail.com,+40 721 234 567,1993-04-25,RO,Bucarest,Rumanía,web,2024-09-01 00:00:00+02:00,True
+35,Haruto,Sato Kimura,haruto.sato@gmail.com,+81 90 8765 4321,1979-01-30,JP,Osaka,Japón,agencia,2024-10-15 00:00:00+02:00,True

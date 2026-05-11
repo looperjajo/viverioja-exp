@@ -1,0 +1,14 @@
+# ViveRioja ETL — Dependencias
+# Instalar con: pip install -r requirements.txt
+
+# Conexión a PostgreSQL
+psycopg2-binary==2.9.9     # driver PostgreSQL para Python
+sqlalchemy==2.0.30         # ORM / connection pooling (usa psycopg2 por debajo)
+
+# Manipulación de datos
+pandas==2.2.2
+numpy==1.26.4
+
+# Generación de reportes
+reportlab==4.1.0           # PDF con control total de layout y estilos
+openpyxl==3.1.2            # Excel (.xlsx) — requerido por pandas ExcelWriter

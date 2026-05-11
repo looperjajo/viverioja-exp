@@ -1,0 +1,36 @@
+id,nombre_completo,ciudad,pais,nacionalidad,canal_adquisicion
+1,María González López,Madrid,España,ES,web
+2,Javier Martínez Ruiz,Bilbao,España,ES,redes_sociales
+3,Carmen Rodríguez Pérez,Barcelona,España,ES,referido
+4,Antonio López García,Valencia,España,ES,agencia
+5,Isabel Fernández Torres,Logroño,España,ES,web
+6,Pablo Sánchez Moreno,Zaragoza,España,ES,redes_sociales
+7,Lucía Ramírez Jiménez,Pamplona,España,ES,web
+8,Diego Hernández Castro,Sevilla,España,ES,feria
+9,Marta Jiménez Vega,Vitoria,España,ES,referido
+10,Sergio Torres Blanco,San Sebastián,España,ES,web
+11,Sophie Dubois Martin,Paris,Francia,FR,web
+12,Thomas Müller Schmidt,Múnich,Alemania,DE,agencia
+13,Emma Wilson Johnson,Londres,Reino Unido,GB,web
+14,Luca Rossi Ferrari,Milán,Italia,IT,redes_sociales
+15,Anna Van den Berg,Ámsterdam,Países Bajos,NL,agencia
+16,Michael Thompson Davis,Nueva York,EEUU,US,web
+17,Yuki Tanaka Watanabe,Tokio,Japón,JP,agencia
+18,Ana Carolina Silva Pereira,São Paulo,Brasil,BR,redes_sociales
+19,Roberto Álvarez Navarro,Madrid,España,ES,referido
+20,Patricia Moreno García,Bilbao,España,ES,web
+21,Eduardo Ruiz Castillo,Madrid,España,ES,agencia
+22,Natalia Iglesias Prado,La Coruña,España,ES,redes_sociales
+23,Álvaro Cruz Medina,Málaga,España,ES,web
+24,Cristina Molina Ramos,Valladolid,España,ES,feria
+25,Víctor Ortega Serrano,Burgos,España,ES,referido
+26,Laura Gil Fuentes,Logroño,España,ES,web
+27,Carlos Herrera Montoya,Bilbao,España,ES,redes_sociales
+28,Beatriz Santos Nieto,Madrid,España,ES,web
+29,Jorge Reyes Domínguez,Zaragoza,España,ES,agencia
+30,Silvia Vargas Campos,Valencia,España,ES,web
+31,François Leroy Dupont,Lyon,Francia,FR,agencia
+32,Ingrid Hansen Nielsen,Copenhague,Dinamarca,DK,web
+33,Marco Bianchi Conti,Roma,Italia,IT,redes_sociales
+34,Elena Popescu Ionescu,Bucarest,Rumanía,RO,web
+35,Haruto Sato Kimura,Osaka,Japón,JP,agencia
