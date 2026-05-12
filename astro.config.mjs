@@ -3,6 +3,5 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://looperjajo.github.io',
-  base: '/viverioja-exp',
+  site: 'https://proyecto-intermodular.vercel.app',
 });
